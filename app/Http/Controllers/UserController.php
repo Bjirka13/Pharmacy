@@ -54,6 +54,51 @@ class UserController extends Controller
         }
     }
 	
+	public function dashboard() 
+	{
+		$user = Auth::user();
+		if($user->hak_akses == 'admin'){
+			return view('admin.dashboard');
+		} elseif($user->hak_akses == 'supplier') {
+			return view('supplier.dashboard');
+		} else {
+			return redirect('/');
+		}
+	}
+	
+	// Supplier
+    public function supplier_produk()
+    {
+        return view('supplier.produk');
+    }
+
+    public function supplier_transaksi()
+    {
+        return view('supplier.transaksi');
+    }
+
+    public function supplier_profil()
+    {
+        return view('supplier.profil');
+    }
+	
+	// Method untuk Pelanggan
+    public function pelanggan_pesanan()
+    {
+        return view('pelanggan.pesanan');
+    }
+
+    public function pelanggan_keranjang()
+    {
+        return view('pelanggan.keranjang');
+    }
+
+    public function pelanggan_profil()
+    {
+        return view('pelanggan.profil');
+    }
+
+	
 	public function logout(Request $request)
 	{
 		Auth::logout();

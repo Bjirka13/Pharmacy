@@ -10,7 +10,7 @@
     <div class="card-body">
       <p class="login-box-msg">Daftar Akun</p>
 
-      <form action="{{ route('user.register_store') }}" method="post">
+      <form action="{{ route('register_store') }}" method="post">
         @csrf
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="name" placeholder="Full name">

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="csrf-toke" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Admin | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -52,19 +52,21 @@
           <i class="fas fa-search"></i>
         </a>
         <div class="navbar-search-block">
-          <form class="form-inline">
-            <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
+          <form class="form-inline" action="{{ route('obat.index') }}" method="GET">
+			  <div class="input-group input-group-sm">
+				<input class="form-control form-control-navbar" 
+					   type="search" 
+					   name="search" 
+					   placeholder="Cari obat atau supplier..." 
+					   value="{{ request('search') }}">
+				<div class="input-group-append">
+				  <button class="btn btn-navbar" type="submit">
+					<i class="fas fa-search"></i>
+				  </button>
+				</div>
+			  </div>
+			</form>
+
         </div>
       </li>
 

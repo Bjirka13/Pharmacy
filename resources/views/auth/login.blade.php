@@ -11,7 +11,7 @@
     <div class="card-body">
       <p class="login-box-msg">Sign in</p>
 
-      <form action="{{ route('user.login') }}" method="post">
+      <form action="{{ route('login') }}" method="post">
         @csrf
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" placeholder="Email">
@@ -47,7 +47,7 @@
       </form>
 
       <p class="mb-0">
-        <a href="{{ route('user.register')}}" class="text-center">Belum punya akun? Daftar</a>
+        <a href="{{ route('register')}}" class="text-center">Belum punya akun? Daftar</a>
       </p>
     </div>
     <!-- /.card-body -->

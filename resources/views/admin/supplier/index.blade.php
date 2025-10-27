@@ -50,16 +50,14 @@
                                                 <td>{{ $supplier->alamat }}</td>
                                                 <td>{{ $supplier->telepon }}</td>
                                                 <td>
-                                                    <form action="{{ route('supplier.destroy', $supplier->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button type="submit" class="btn btn-danger"><i
-                                                                class="fas fa-trash"></i></button>
-                                                        <a href="{{ route('supplier.edit', $supplier->id) }}"
-                                                            class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    </form>
-                                                </td>
+													<a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-warning">
+														<i class="fas fa-edit"></i>
+													</a>
+
+													<button type="button" class="btn btn-danger btn-delete" data-id="{{ $supplier->id }}">
+														<i class="fas fa-trash"></i>
+													</button>
+												</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -72,4 +70,30 @@
         </section>
         <!-- /.content -->
     </div>
+@endsection
+
+@section('js')
+<script>
+    $(document).on('click', '.btn-delete', function() {
+        let id = $(this).data('id');
+
+        if(confirm("Yakin ingin menghapus data ini?")) {
+            $.ajax({
+                type: "POST",
+                url: "/supplier/" + id,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    _method: "DELETE"
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function() {
+                    alert("Gagal menghapus data!");
+                }
+            });
+        }
+    });
+</script>
 @endsection

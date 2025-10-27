@@ -32,6 +32,11 @@
                                         class="fas fa-plus"></i>Tambah</a>
                             </div>
                             <div class="card-body">
+							@if(session('success'))
+								<div class="alert alert-success">
+									{{ session('success') }}
+								</div>
+							@endif
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -41,7 +46,7 @@
                                             <th>Harga Beli</th>
                                             <th>Harga Jual</th>
                                             <th>Stok</th>
-                                            <th>ID Supplier</th>
+                                            <th>Supplier</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -54,7 +59,7 @@
                                                 <td>{{ $obat->harga_beli }}</td>
                                                 <td>{{ $obat->harga_jual }}</td>
                                                 <td>{{ $obat->stok }}</td>
-                                                <td>{{ $obat->id_supplier }}</td>
+                                                <td>{{ $obat->supplier->perusahaan ?? '-' }}</td>
                                                 <td>
                                                     <form action="{{ route('obat.destroy', $obat->id) }}"
                                                         method="post">

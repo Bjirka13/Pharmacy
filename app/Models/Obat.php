@@ -13,6 +13,6 @@ class Obat extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');
+        return $this->belongsTo(Supplier::class, 'id_supplier');
     }
 }

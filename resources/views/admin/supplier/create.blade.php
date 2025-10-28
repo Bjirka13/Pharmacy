@@ -82,7 +82,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         $.ajax({
-            url: '/admin/supplier',
+            url: '/supplier',
             type: 'POST',
             data: $('#form-supplier').serialize(),
             success: function(response) {

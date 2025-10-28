@@ -52,7 +52,7 @@ class SupplierController extends Controller
             'telepon' => $validate['telepon'],
         ]);
 
-        return response()->json(['message' => 'Supplier berhasil ditambahkan']);
+        return redirect()->route('supplier.index')->with('success', 'Supplier berhasil ditambahkan');
     }
 
     public function destroy($id)
@@ -61,6 +61,6 @@ class SupplierController extends Controller
         $supplier->user()->delete(); // hapus juga usernya
         $supplier->delete();
 
-        return response()->json(['message' => 'Supplier berhasil dihapus']);
+        return redirect()->back()->with('success', 'Supplier berhasil dihapus');
     }
 }

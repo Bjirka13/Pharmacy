@@ -11,10 +11,10 @@ class Supplier extends Model
     protected $table = 'suppliers';
     protected $fillable = ['id_user', 'perusahaan', 'alamat', 'telepon'];
 
-    public function obat()
-    {
-        return $this->hasMany(Obat::class, 'id_supplier', 'id_supplier');
-    }
+   public function obat()
+	{
+		return $this->hasMany(Obat::class, 'id_supplier', 'id');
+	}
 	
 	public function user()
 	{

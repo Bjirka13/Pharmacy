@@ -6,23 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('suppliers', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_supplier'); // kalau kamu pakai id_supplier sebagai PK
+            $table->unsignedBigInteger('id_user'); // relasi ke tabel users
             $table->string('perusahaan');
             $table->string('alamat');
             $table->string('telepon');
             $table->timestamps();
+
+            // relasi ke tabel users
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('suppliers');

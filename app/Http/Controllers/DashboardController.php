@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function dashboard()
-	{
-		$user = auth()->user();
+    public function index()
+    {
+        $user = Auth::user();
 
-		if ($user->hak_akses == 'admin') {
-			return view('admin.dashboard');
-		} elseif ($user->hak_akses == 'supplier') {
-			return view('supplier.dashboard');
-		} elseif ($user->hak_akses == 'pelanggan') {
-			return view('pelanggan.dashboard');
-		}
-
-		return redirect('/')->with('error', 'Hak akses tidak dikenali');
-	}
+        return match($user->hak_akses) {
+            'admin' => view('admin.dashboard'),
+            'supplier' => view('supplier.dashboard'),
+            'pelanggan' => view('pelanggan.dashboard'),
+            default => abort(403, 'Akses tidak diizinkan'),
+        };
+    }
 }

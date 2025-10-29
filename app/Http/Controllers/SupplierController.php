@@ -54,7 +54,21 @@ class SupplierController extends Controller
 
         return redirect()->route('supplier.index')->with('success', 'Supplier berhasil ditambahkan');
     }
-
+	
+	public function edit($id) 
+	{
+		$supplier = Supplier::findOrFail($id); $menu = 'Supplier'; $subMenu = 'Edit'; return view('admin.supplier.edit', compact('supplier', 'menu', 'subMenu')); 
+		
+	} 
+	
+	public function update(Request $request, $id) 
+	{ 
+		$validate = $request->validate([ 'perusahaan' => 'required', 'alamat' => 'required', 'telepon' => 'required', ]); 
+		$supplier = Supplier::findOrFail($id); 
+		
+		$supplier->update($validate); return response()->json(['message' => 'Data Berhasil Diperbarui']); 	
+	}
+	
     public function destroy($id)
     {
         $supplier = Supplier::findOrFail($id);

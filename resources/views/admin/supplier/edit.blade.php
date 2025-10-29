@@ -33,7 +33,7 @@
                                 <form method="post" id="form-supplier">
                                     @csrf
                                     @method('PUT')
-
+									
                                     <label for="">Perusahaan</label>
                                     <input type="text" class="form-control mb-3" name="perusahaan" id="perusahaan"
                                         value="{{ $supplier->perusahaan }}">

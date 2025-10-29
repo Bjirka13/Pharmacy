@@ -19,9 +19,39 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <!-- isi dashboard -->
-      </div><!-- /.container-fluid -->
+      <div class="row">
+		  <!-- Total Supplier -->
+		  <div class="col-lg-6 col-12">
+			<div class="small-box bg-info">
+			  <div class="inner">
+				<h3>{{ $totalSupplier }}</h3>
+				<p>Total Supplier</p>
+			  </div>
+			  <div class="icon">
+				<i class="fas fa-truck"></i>
+			  </div>
+			  <a href="{{ route('supplier.index') }}" class="small-box-footer">
+				Lihat Supplier <i class="fas fa-arrow-circle-right"></i>
+			  </a>
+			</div>
+		  </div>
+
+		  <!-- Total Obat -->
+		  <div class="col-lg-6 col-12">
+			<div class="small-box bg-success">
+			  <div class="inner">
+				<h3>{{ $totalObat }}</h3>
+				<p>Total Obat</p>
+			  </div>
+			  <div class="icon">
+				<i class="fas fa-pills"></i>
+			  </div>
+			  <a href="{{ route('obat.index') }}" class="small-box-footer">
+				Lihat Obat <i class="fas fa-arrow-circle-right"></i>
+			  </a>
+			</div>
+		  </div>
+		</div>
     </section>
     <!-- /.content -->
   </div>

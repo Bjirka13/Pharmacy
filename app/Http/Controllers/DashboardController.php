@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Supplier;
 use App\Models\Obat;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -12,18 +13,31 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Untuk admin, tampilkan jumlah data
         if ($user->hak_akses === 'admin') {
             $totalSupplier = Supplier::count();
             $totalObat = Obat::count();
+            $totalPelanggan = User::where('hak_akses', 'pelanggan')->count();
+            $stokMenipis = Obat::where('stok', '<', 10)->count();
+            $obatExpired = Obat::where('expired', '<=', now()->addDays(30))->count();
 
-            return view('admin.dashboard', compact('totalSupplier', 'totalObat'));
+            // kirim semua variabel ke view
+            return view('admin.dashboard', compact(
+                'totalSupplier',
+                'totalObat',
+                'totalPelanggan',
+                'stokMenipis',
+                'obatExpired'
+            ));
         }
 
-        return match ($user->hak_akses) {
-            'supplier' => view('supplier.dashboard'),
-            'pelanggan' => view('pelanggan.dashboard'),
-            default => abort(403, 'Akses tidak diizinkan'),
-        };
+        if ($user->hak_akses === 'supplier') {
+            return view('supplier.dashboard');
+        }
+
+        if ($user->hak_akses === 'pelanggan') {
+            return view('pelanggan.dashboard');
+        }
+
+        abort(403, 'Akses tidak diizinkan');
     }
 }

@@ -1,90 +1,181 @@
-<!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-  <!-- Brand Logo -->
-  <a href="{{ url('/dashboard') }}" class="brand-link">
-    <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">
-      Halo, {{ Auth::user()->name }}
-    </span>
-  </a>
-
-  <!-- Sidebar -->
-<!-- Sidebar -->
-<div class="sidebar" style="display: flex; flex-direction: column; justify-content: space-between; height: 100vh;">
-
-  <!-- Bagian Atas (User + Menu) -->
-  <div>
-    <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-      </div>
+<aside class="sidebar" role="navigation" aria-label="Main Navigation">
+    <style>
+        .sidebar {
+            width: 260px;
+            background: #16213e;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-brand {
+            padding: 25px 20px;
+            background: #0f3460;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .brand-text h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .brand-text p {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            margin: 5px 15px;
+        }
+        
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            color: #ddd;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .menu-link:hover {
+            background: #0f3460;
+            color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .menu-link.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+        
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            padding: 0 15px;
+        }
+        
+        .logout-form {
+            margin: 0;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+    
+    <div class="sidebar-brand">
+        <a href="{{ route('dashboard') }}" class="brand-logo">
+            <div class="brand-icon">
+                <i class="fas fa-hospital"></i>
+            </div>
+            <div class="brand-text">
+                <h2>Sistem Apotek</h2>
+                <p>Admin Panel</p>
+            </div>
+        </a>
     </div>
-
-    <!-- SidebarSearch Form -->
-    <div class="form-inline">
-      <div class="input-group" data-widget="sidebar-search">
-        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-sidebar">
-            <i class="fas fa-search fa-fw"></i>
-          </button>
+    
+    <nav class="sidebar-menu">
+        <div class="menu-item">
+            <a href="{{ route('dashboard') }}" class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt menu-icon"></i>
+                <span>Dashboard</span>
+            </a>
         </div>
-      </div>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" role="menu" data-accordion="false">
-
-        <!-- Dashboard -->
-        <li class="nav-item">
-          <a href="{{ url('/dashboard') }}" class="nav-link active">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Dashboard</p>
-          </a>
-        </li>
-
-        <!-- Obat -->
-        <li class="nav-item">
-          <a href="{{ route('obat.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-pills"></i>
-            <p>
-              Obat
-              <span class="right badge badge-danger">New</span>
-            </p>
-          </a>
-        </li>
-
-        <!-- Supplier -->
-        <li class="nav-item">
-          <a href="{{ route('supplier.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-boxes"></i>
-            <p>
-              Supplier
-              <span class="right badge badge-danger">New</span>
-            </p>
-          </a>
-        </li>
-
-      </ul>
+        
+        <div class="menu-item">
+            <a href="{{ route('obat.index') }}" class="menu-link {{ request()->routeIs('obat*') ? 'active' : '' }}">
+                <i class="fas fa-pills menu-icon"></i>
+                <span>Obat</span>
+            </a>
+        </div>
+        
+        <div class="menu-item">
+            <a href="{{ route('supplier.index') }}" class="menu-link {{ request()->routeIs('supplier*') ? 'active' : '' }}">
+                <i class="fas fa-truck menu-icon"></i>
+                <span>Supplier</span>
+            </a>
+        </div>
+        
+        <div class="menu-item">
+            <a href="{{ route('admin.profil') }}" class="menu-link {{ request()->routeIs('admin.profil*') ? 'active' : '' }}">
+                <i class="fas fa-user menu-icon"></i>
+                <span>Profil</span>
+            </a>
+        </div>
     </nav>
-  </div>
-
-  <!-- Bagian Bawah (Logout) -->
-  <div class="p-3 text-right">
-    <form action="{{ route('logout') }}" method="POST">
-      @csrf
-      <button type="submit" class="btn btn-danger btn-sm">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button>
-    </form>
-  </div>
-
-</div>
-<!-- /.sidebar -->
-  <!-- /.sidebar -->
+    
+    <div class="logout-section">
+        <form action="{{ route('logout') }}" method="POST" class="logout-form">
+            @csrf
+            <button type="submit" class="logout-btn">
+                <i class="fas fa-sign-out-alt menu-icon"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </div>
 </aside>

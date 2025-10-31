@@ -26,34 +26,66 @@ class SupplierController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validate = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'perusahaan' => 'required',
-            'alamat' => 'required',
-            'telepon' => 'required',
-        ]);
-
-        // Buat user supplier
-        $user = User::create([
-            'name' => $validate['name'],
-            'email' => $validate['email'],
-            'password' => Hash::make($validate['password']),
-            'hak_akses' => 'supplier',
-        ]);
-
-        // Buat record di tabel supplier
-        Supplier::create([
-            'id_user' => $user->id,
-            'perusahaan' => $validate['perusahaan'],
-            'alamat' => $validate['alamat'],
-            'telepon' => $validate['telepon'],
-        ]);
-
-        return redirect()->route('supplier.index')->with('success', 'Supplier berhasil ditambahkan');
-    }
+	{
+		try {
+			$validate = $request->validate([
+				'name' => 'required|string|max:255',
+				'email' => 'required|email|unique:users',
+				'password' => 'required|min:6',
+				'perusahaan' => 'required|string|max:255',
+				'alamat' => 'required|string',
+				'telepon' => 'required|string|max:20',
+			]);
+			
+			// Buat user supplier
+			$user = User::create([
+				'name' => $validate['name'],
+				'email' => $validate['email'],
+				'password' => Hash::make($validate['password']),
+				'hak_akses' => 'supplier',
+			]);
+			
+			// Buat record di tabel supplier
+			$supplier = Supplier::create([
+				'id_user' => $user->id,
+				'perusahaan' => $validate['perusahaan'],
+				'alamat' => $validate['alamat'],
+				'telepon' => $validate['telepon'],
+			]);
+			
+			// RETURN JSON UNTUK AJAX
+			if ($request->ajax() || $request->wantsJson()) {
+				return response()->json([
+					'success' => true,
+					'message' => 'Supplier berhasil ditambahkan!',
+					'data' => $supplier
+				]);
+			}
+			
+			return redirect()->route('supplier.index')->with('success', 'Supplier berhasil ditambahkan!');
+			
+		} catch (\Illuminate\Validation\ValidationException $e) {
+			// VALIDATION ERRORS
+			if ($request->ajax() || $request->wantsJson()) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Validasi gagal',
+					'errors' => $e->errors()
+				], 422);
+			}
+			return redirect()->back()->withErrors($e->errors())->withInput();
+			
+		} catch (\Exception $e) {
+			// OTHER ERRORS
+			if ($request->ajax() || $request->wantsJson()) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Gagal menambahkan supplier: ' . $e->getMessage()
+				], 500);
+			}
+			return redirect()->route('supplier.index')->with('error', 'Gagal menambahkan supplier: ' . $e->getMessage());
+		}
+	}
 	
 	public function edit($id) 
 	{
@@ -69,12 +101,36 @@ class SupplierController extends Controller
 		$supplier->update($validate); return response()->json(['message' => 'Data Berhasil Diperbarui']); 	
 	}
 	
-    public function destroy($id)
-    {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->user()->delete(); // hapus juga usernya
-        $supplier->delete();
-
-        return redirect()->back()->with('success', 'Supplier berhasil dihapus');
-    }
+    public function destroy(Request $request, $id)
+	{
+		try {
+			$supplier = Supplier::findOrFail($id);
+			$user = User::findOrFail($supplier->id_user);
+			
+			// Hapus supplier dulu
+			$supplier->delete();
+			
+			// Hapus user
+			$user->delete();
+			
+			// PASTI RETURN JSON UNTUK AJAX
+			if ($request->ajax() || $request->wantsJson()) {
+				return response()->json([
+					'success' => true,
+					'message' => 'Supplier berhasil dihapus!'  // ← INI YANG DIPANGGIL response.message
+				]);
+			}
+			
+			return redirect()->route('supplier.index')->with('success', 'Supplier berhasil dihapus!');
+			
+		} catch (\Exception $e) {
+			if ($request->ajax() || $request->wantsJson()) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Gagal menghapus supplier: ' . $e->getMessage()
+				], 500);
+			}
+			return redirect()->route('supplier.index')->with('error', 'Gagal menghapus supplier: ' . $e->getMessage());
+		}
+	}
 }

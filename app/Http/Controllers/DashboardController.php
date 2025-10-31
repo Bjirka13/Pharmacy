@@ -20,12 +20,15 @@ class DashboardController extends Controller
             $stokMenipis = Obat::where('stok', '<', 10)->count();
             $obatExpired = Obat::where('expired', '<=', now()->addDays(30))->count();
             
+			$totalNotifikasi = $stokMenipis + $obatExpired;
+			
             return view('admin.dashboard', compact(
                 'totalSupplier',
                 'totalObat',
                 'totalPelanggan',
                 'stokMenipis',
-                'obatExpired'
+                'obatExpired',
+				'totalNotifikasi'
             ));
         }
         

@@ -1,59 +1,59 @@
 @extends('auth.master')
 
+@section('title', 'Login')
+
 @section('content')
-<body class="hold-transition login-page">
-<div class="login-box">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Ghani</b>Pharmacy</a>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <h1><i class="fas fa-hospital"></i> Sistem Apotek</h1>
+      <p>Masuk ke akun Anda</p>
     </div>
-    <div class="card-body">
-      <p class="login-box-msg">Sign in</p>
-
-      <form action="{{ route('login') }}" method="post">
-        @csrf
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-
-      <p class="mb-0">
-        <a href="{{ route('register')}}" class="text-center">Belum punya akun? Daftar</a>
-      </p>
+    
+    @if ($errors->any())
+    <div class="alert alert-danger">
+      <strong>Error!</strong> {{ $errors->first() }}
     </div>
-    <!-- /.card-body -->
+    @endif
+    
+    @if (session('success'))
+    <div class="alert alert-success">
+      <strong>Berhasil!</strong> {{ session('success') }}
+    </div>
+    @endif
+    
+    <form action="{{ route('login') }}" method="POST">
+      @csrf
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required>
+          <i class="fas fa-envelope input-icon"></i>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
+          <i class="fas fa-lock input-icon"></i>
+        </div>
+      </div>
+      
+      <div class="checkbox-wrapper">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Ingat Saya</label>
+      </div>
+      
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+    </form>
+    
+    <div class="auth-link">
+      Belum punya akun? <a href="{{ route('register') }}">Daftar Sekarang</a>
+    </div>
   </div>
-  <!-- /.card -->
 </div>
-<!-- /.login-box -->
 @endsection
-

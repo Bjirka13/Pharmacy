@@ -1,103 +1,67 @@
 @extends('auth.master')
+
+@section('title', 'Register')
+
 @section('content')
-
-<body class="hold-transition register-page">
-<div class="register-box">
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="/" class="h1"><b>Ghani</b>Pharmacy</a>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <h1><i class="fas fa-hospital"></i> Sistem Apotek</h1>
+      <p>Buat akun baru</p>
     </div>
-
-    <div class="card-body">
-      <p class="login-box-msg">Daftar Akun</p>
-
-      <form action="{{ route('register') }}" method="post">
-        @csrf
-
-        {{-- Nama Lengkap --}}
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="Nama lengkap" required>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-user"></span></div>
-          </div>
+    
+    @if ($errors->any())
+    <div class="alert alert-danger">
+      <strong>Error!</strong> {{ $errors->first() }}
+    </div>
+    @endif
+    
+    <form action="{{ route('register') }}" method="POST">
+      @csrf
+      
+      <!-- Hidden input untuk hak_akses otomatis pelanggan -->
+      <input type="hidden" name="hak_akses" value="pelanggan">
+      
+      <div class="form-group">
+        <label for="name">Nama Lengkap</label>
+        <div class="input-wrapper">
+          <input type="text" id="name" name="name" placeholder="Masukkan nama lengkap" required>
+          <i class="fas fa-user input-icon"></i>
         </div>
-
-        {{-- Email --}}
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" placeholder="Email" required>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
-          </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" name="email" placeholder="Masukkan email" required>
+          <i class="fas fa-envelope input-icon"></i>
         </div>
-
-        {{-- Password --}}
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-lock"></span></div>
-          </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+          <i class="fas fa-lock input-icon"></i>
         </div>
-
-        {{-- Konfirmasi Password --}}
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password_confirmation" placeholder="Ulangi password" required>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-lock"></span></div>
-          </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password_confirmation">Konfirmasi Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password" required>
+          <i class="fas fa-lock input-icon"></i>
         </div>
-
-        {{-- Role --}}
-        <div class="input-group mb-3">
-          <select name="hak_akses" id="hak_akses" class="form-control" required>
-            <option value="">-- Pilih Hak Akses --</option>
-            <option value="supplier">Supplier</option>
-            <option value="pelanggan">Pelanggan</option>
-          </select>
-        </div>
-
-        {{-- Input tambahan hanya untuk Supplier --}}
-        <div id="supplier-fields" style="display: none;">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="perusahaan" placeholder="Nama Perusahaan">
-            <div class="input-group-append">
-              <div class="input-group-text"><span class="fas fa-building"></span></div>
-            </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="alamat" placeholder="Alamat Perusahaan">
-            <div class="input-group-append">
-              <div class="input-group-text"><span class="fas fa-map-marker-alt"></span></div>
-            </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="telepon" placeholder="No. Telepon Perusahaan">
-            <div class="input-group-append">
-              <div class="input-group-text"><span class="fas fa-phone"></span></div>
-            </div>
-          </div>
-        </div>
-
-        {{-- Tombol Register --}}
-        <div class="row">
-          <div class="col-12 d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary">Daftar</button>
-          </div>
-        </div>
-      </form>
-
-      <a href="{{ route('login') }}" class="text-center d-block mt-2">Sudah punya akun? Login</a>
+      </div>
+      
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-user-plus"></i> Daftar Sekarang
+      </button>
+    </form>
+    
+    <div class="auth-link">
+      Sudah punya akun? <a href="{{ route('login') }}">Login Sekarang</a>
     </div>
   </div>
 </div>
-
-{{-- Script untuk menampilkan field Supplier --}}
-<script>
-document.getElementById('hak_akses').addEventListener('change', function() {
-    const supplierFields = document.getElementById('supplier-fields');
-    supplierFields.style.display = this.value === 'supplier' ? 'block' : 'none';
-});
-</script>
-
 @endsection

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\DetailUser;
@@ -45,7 +44,6 @@ class UserController extends Controller
         return $this->redirectToDashboard($user);
     }
 
-
     // LOGIN
     public function loginForm()
     {
@@ -70,26 +68,24 @@ class UserController extends Controller
         ])->onlyInput('email');
     }
 
-
     // DASHBOARD
     public function dashboard()
-	{
-		$user = Auth::user();
-		if (!$user) {
-			return redirect()->route('login');
-		}
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
-		if ($user->hak_akses === 'admin') {
-			return view('admin.dashboard');
-		} elseif ($user->hak_akses === 'supplier') {
-			return view('supplier.dashboard');
-		} elseif ($user->hak_akses === 'pelanggan') {
-			return view('pelanggan.dashboard');
-		}
+        if ($user->hak_akses === 'admin') {
+            return view('admin.dashboard');
+        } elseif ($user->hak_akses === 'supplier') {
+            return view('supplier.dashboard');
+        } elseif ($user->hak_akses === 'pelanggan') {
+            return view('pelanggan.dashboard');
+        }
 
-		return redirect()->route('login');
-	}
-
+        return redirect()->route('login');
+    }
 
     private function redirectToDashboard($user)
     {
@@ -103,7 +99,6 @@ class UserController extends Controller
 
         return redirect('/');
     }
-
 
     // SUPPLIER VIEWS
     public function supplier_produk()
@@ -121,13 +116,7 @@ class UserController extends Controller
         return view('supplier.profil');
     }
 
-
     // PELANGGAN VIEWS
-    public function pelanggan_pesanan()
-    {
-        return view('pelanggan.pesanan');
-    }
-
     public function pelanggan_keranjang()
     {
         return view('pelanggan.keranjang');
@@ -137,7 +126,6 @@ class UserController extends Controller
     {
         return view('pelanggan.profil');
     }
-
 
     // LOGOUT
     public function logout(Request $request)

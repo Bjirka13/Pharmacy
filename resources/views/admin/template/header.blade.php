@@ -17,12 +17,19 @@
         }
         
         .menu-toggle {
-            display: none;
             background: none;
             border: none;
             color: #eee;
             font-size: 24px;
             cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #667eea;
         }
         
         .header-title {
@@ -126,10 +133,6 @@
         }
         
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            
             .header-title {
                 font-size: 16px;
             }

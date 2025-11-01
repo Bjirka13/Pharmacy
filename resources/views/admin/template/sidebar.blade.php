@@ -1,4 +1,4 @@
-<aside class="sidebar" role="navigation" aria-label="Main Navigation">
+<aside class="sidebar collapsed" role="navigation" aria-label="Main Navigation">
     <style>
         .sidebar {
             width: 260px;
@@ -9,14 +9,46 @@
             top: 0;
             box-shadow: 2px 0 10px rgba(0,0,0,0.3);
             overflow-y: auto;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
             z-index: 1000;
+            transform: translateX(-100%); /* Default hidden */
+        }
+        
+        /* Sidebar visible when has class 'show' */
+        .sidebar.show {
+            transform: translateX(0);
+        }
+        
+        /* Close Button */
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .sidebar-close:hover {
+            background: rgba(102, 126, 234, 0.8);
+            transform: translateX(-5px);
         }
         
         .sidebar-brand {
-            padding: 25px 20px;
+            padding: 25px 50px 25px 20px;
             background: #0f3460;
             border-bottom: 2px solid #667eea;
+            position: relative;
         }
         
         .brand-logo {
@@ -116,16 +148,29 @@
             box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
         }
         
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
         }
     </style>
+    
+    <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close Sidebar">
+        <i class="fas fa-arrow-left"></i>
+    </button>
     
     <div class="sidebar-brand">
         <a href="{{ route('dashboard') }}" class="brand-logo">
@@ -162,9 +207,9 @@
         </div>
         
         <div class="menu-item">
-            <a href="{{ route('admin.profil') }}" class="menu-link {{ request()->routeIs('admin.profil*') ? 'active' : '' }}">
-                <i class="fas fa-user menu-icon"></i>
-                <span>Profil</span>
+            <a href="{{ route('transaksi.index') }}" class="menu-link {{ request()->routeIs('transaksi*') ? 'active' : '' }}">
+                <i class="fas fa-truck menu-icon"></i>
+                <span>Transaksi</span>
             </a>
         </div>
     </nav>
@@ -179,3 +224,6 @@
         </form>
     </div>
 </aside>
+
+<!-- Overlay -->
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>

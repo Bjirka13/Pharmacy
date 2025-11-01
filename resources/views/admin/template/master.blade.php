@@ -31,19 +31,13 @@
         
         .content-wrapper {
             flex: 1;
-            margin-left: 260px;
+            margin-left: 0; /* Changed from 260px to 0 */
             transition: margin-left 0.3s;
         }
         
         .main-content {
             padding: 20px 30px;
             min-height: calc(100vh - 140px);
-        }
-        
-        @media (max-width: 768px) {
-            .content-wrapper {
-                margin-left: 0;
-            }
         }
     </style>
     
@@ -99,10 +93,50 @@
             toastr[type](message);
         }
 
-        // Toggle sidebar untuk mobile
+        // Toggle sidebar (buka/tutup)
         function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('active');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when sidebar is open
+            if (sidebar.classList.contains('show')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         }
+
+        // Tutup sidebar
+        function closeSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.remove('show');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuLinks = document.querySelectorAll('.menu-link');
+            
+            // Auto close sidebar saat klik menu
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    closeSidebar();
+                });
+            });
+
+            // Tutup sidebar dengan tombol ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeSidebar();
+                }
+            });
+        });
 
         // Auto hide alerts
         setTimeout(() => $('.alert').fadeOut(), 5000);

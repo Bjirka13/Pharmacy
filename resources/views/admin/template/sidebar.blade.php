@@ -207,11 +207,12 @@
         </div>
         
         <div class="menu-item">
-            <a href="{{ route('transaksi.index') }}" class="menu-link {{ request()->routeIs('transaksi*') ? 'active' : '' }}">
-                <i class="fas fa-truck menu-icon"></i>
-                <span>Transaksi</span>
-            </a>
-        </div>
+			<a href="{{ route('admin.transaksi.index') }}" class="menu-link {{ request()->routeIs('admin.transaksi*') ? 'active' : '' }}">
+				<i class="fas fa-truck menu-icon"></i>
+				<span>Transaksi</span>
+			</a>
+		</div>
+
     </nav>
     
     <div class="logout-section">

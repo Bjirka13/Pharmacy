@@ -14,9 +14,10 @@ class Transaksi extends Model
         'id_pelanggan', 'notransaksi', 'tanggal_transaksi', 'status', 'total_pembayaran'
     ];
 
+    // FIX: Ganti dari Pelanggan ke User
     public function pelanggan()
     {
-        return $this->belongsTo(Pelanggan::class, 'id_pelanggan');
+        return $this->belongsTo(User::class, 'id_pelanggan');
     }
 
     public function detail()
@@ -24,4 +25,3 @@ class Transaksi extends Model
         return $this->hasMany(DetailTransaksi::class, 'transaksi_id');
     }
 }
-

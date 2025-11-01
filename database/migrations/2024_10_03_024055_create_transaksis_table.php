@@ -6,25 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_pelanggan');
             $table->string('notransaksi');
-            $table->date('tanggal_transaksi');
-            $table->enum('status',['keranjang','lunas','batal']);
+            $table->dateTime('tanggal_transaksi'); // UBAH dari date ke dateTime
+            $table->enum('status',['pending','proses','selesai','batal'])->default('pending'); // UBAH enum
             $table->integer('total_pembayaran');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('transaksis');

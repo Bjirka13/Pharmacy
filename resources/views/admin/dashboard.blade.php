@@ -233,7 +233,7 @@
                         </div>
                         <div class="stat-title">Total Supplier</div>
                         <div class="stat-value">{{ $totalSupplier }}</div>
-                        <a href="{{ route('supplier.index') }}" class="stat-link">
+                        <a href="{{ route('admin.supplier.index') }}" class="stat-link">
                             Lihat Supplier <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>

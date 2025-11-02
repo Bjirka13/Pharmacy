@@ -129,7 +129,7 @@
                 <div>
                     <h1>✏️ Edit {{ $menu }}</h1>
                 </div>
-                <a href="{{ route('supplier.index') }}" class="btn-back">
+                <a href="{{ route('admin.supplier.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>
@@ -196,7 +196,7 @@
             
             $.ajax({
                 type: "POST",
-                url: "{{ route('supplier.update', $supplier->id) }}",
+                url: "{{ route('admin.supplier.update', $supplier->id) }}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.message) {
@@ -206,7 +206,7 @@
                     }
                     
                     setTimeout(function() {
-                        window.location.href = "{{ route('supplier.index') }}";
+                        window.location.href = "{{ route('admin.supplier.index') }}";
                     }, 1000);
                 },
                 error: function(xhr) {

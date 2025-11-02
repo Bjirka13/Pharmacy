@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;  
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\TransaksiController;
@@ -27,7 +27,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/users', [UserController::class, 'admin_users'])->name('users');
-    Route::get('/supplier', [UserController::class, 'admin_supplier'])->name('supplier');
     Route::get('/pelanggan', [UserController::class, 'admin_pelanggan'])->name('pelanggan');
     Route::get('/produk', [UserController::class, 'admin_produk'])->name('produk');
     Route::get('/laporan', [UserController::class, 'admin_laporan'])->name('laporan');
@@ -38,6 +37,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit'])->name('transaksi.edit');
     Route::put('/transaksi/{id}', [TransaksiController::class, 'update'])->name('transaksi.update');
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
+
+    // Admin Supplier Resource - Ini akan membuat semua route CRUD
+    Route::resource('supplier', SupplierController::class);
 });
 
 // -----------------------------
@@ -46,7 +48,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 Route::prefix('supplier')->name('supplier.')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/produk', [UserController::class, 'supplier_produk'])->name('produk');
-    Route::get('/transaksi', [UserController::class, 'supplier_transaksi'])->name('transaksi.index'); // pastikan .index
+    Route::get('/transaksi', [UserController::class, 'supplier_transaksi'])->name('transaksi.index');
     Route::get('/profil', [UserController::class, 'supplier_profil'])->name('profil');
 });
 
@@ -72,4 +74,3 @@ Route::prefix('pelanggan')->name('pelanggan.')->middleware('auth')->group(functi
 // RESOURCE CONTROLLERS
 // -----------------------------
 Route::resource('obat', ObatController::class)->middleware('auth');
-Route::resource('supplier', SupplierController::class)->middleware('auth');

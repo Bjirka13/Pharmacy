@@ -200,7 +200,7 @@
         </div>
         
         <div class="menu-item">
-            <a href="{{ route('supplier.index') }}" class="menu-link {{ request()->routeIs('supplier*') ? 'active' : '' }}">
+            <a href="{{ route('admin.supplier.index') }}" class="menu-link {{ request()->routeIs('supplier*') ? 'active' : '' }}">
                 <i class="fas fa-truck menu-icon"></i>
                 <span>Supplier</span>
             </a>

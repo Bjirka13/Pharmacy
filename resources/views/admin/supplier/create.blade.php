@@ -126,7 +126,7 @@
                 <div>
                     <h1>➕ Tambah {{ $menu }}</h1>
                 </div>
-                <a href="{{ route('supplier.index') }}" class="btn-back">
+                <a href="{{ route('admin.supplier.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>
@@ -210,7 +210,7 @@
             btnSubmit.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
             
             $.ajax({
-                url: '{{ route("supplier.store") }}',
+                url: '{{ route("admin.supplier.store") }}',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -221,7 +221,7 @@
                     }
                     
                     setTimeout(function() {
-                        window.location.href = "{{ route('supplier.index') }}";
+                        window.location.href = "{{ route('admin.supplier.index') }}";
                     }, 1000);
                 },
                 error: function(xhr) {

@@ -143,7 +143,7 @@
             <!-- Page Header -->
             <div class="page-header-card">
                 <h1>🚚 Data Supplier</h1>
-                <a href="{{ route('supplier.create') }}" class="btn-add">
+                <a href="{{ route('admin.supplier.create') }}" class="btn-add">
                     <i class="fas fa-plus"></i>
                     <span>Tambah Supplier</span>
                 </a>
@@ -173,7 +173,7 @@
                                 <td>{{ $supplier->alamat }}</td>
                                 <td>{{ $supplier->telepon }}</td>
                                 <td>
-                                    <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn-action btn-edit">
+                                    <a href="{{ url('admin/supplier/' . $supplier->id . '/edit') }}" class="btn-action btn-edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" class="btn-action btn-delete btn-delete-ajax" data-id="{{ $supplier->id }}">
@@ -209,7 +209,7 @@
         if(confirm("Yakin ingin menghapus supplier ini?")) {
             $.ajax({
                 type: "POST",
-                url: "/supplier/" + id,
+                url: "/admin/supplier/" + id,
                 data: {
                     _token: "{{ csrf_token() }}",
                     _method: "DELETE"

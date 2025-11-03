@@ -56,6 +56,7 @@ class ObatController extends Controller
     {
         $validate = $request->validate([
             'nama' => 'required',
+			'deskripsi' => 'required',
             'expired' => 'required',
             'harga_beli' => 'required',
             'harga_jual' => 'required',
@@ -87,6 +88,7 @@ class ObatController extends Controller
 	{
 		$validate = $request->validate([
 			'nama' => 'required',
+			'deskripsi' => 'required',
 			'expired' => 'required',
 			'harga_beli' => 'required',
 			'harga_jual' => 'required',

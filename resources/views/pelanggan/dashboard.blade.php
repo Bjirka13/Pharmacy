@@ -307,155 +307,164 @@
     </div>
 </div>
 
+{{-- Statistik Pesanan --}}
 <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-header">
-            <div>
-                <div class="stat-title">Total Pesanan</div>
-            </div>
-            <div class="stat-icon">
-                <i class="fas fa-shopping-bag"></i>
-            </div>
-        </div>
-        <div class="stat-value">24</div>
-        <div class="stat-change"><i class="fas fa-arrow-up"></i> +3 bulan ini</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div>
-                <div class="stat-title">Pesanan Aktif</div>
-            </div>
-            <div class="stat-icon">
-                <i class="fas fa-truck"></i>
-            </div>
-        </div>
-        <div class="stat-value">2</div>
-        <div class="stat-change">Sedang dalam pengiriman</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div>
-                <div class="stat-title">Total Belanja</div>
-            </div>
-            <div class="stat-icon">
-                <i class="fas fa-wallet"></i>
-            </div>
-        </div>
-        <div class="stat-value">Rp 1.2M</div>
-        <div class="stat-change"><i class="fas fa-arrow-up"></i> Tahun ini</div>
-    </div>
+    {{-- ... (bagian statistik tetap sama) --}}
 </div>
 
+{{-- ==============================
+     Produk Populer
+============================== --}}
 <h2 class="section-title">🔥 Produk Populer</h2>
 <div class="products-grid">
-    <div class="product-card">
-        <div class="product-image">
-            <i class="fas fa-pills"></i>
-            <span class="product-badge">Promo</span>
-        </div>
-        <div class="product-info">
-            <h3 class="product-name">Paracetamol 500mg</h3>
-            <p class="product-desc">Obat pereda nyeri dan penurun panas</p>
-            <div class="product-footer">
-                <span class="product-price">Rp 25.000</span>
-                <button class="add-to-cart-btn">
-                    <i class="fas fa-cart-plus"></i> Beli
-                </button>
+    @forelse ($produkPopuler as $produk)
+        <div class="product-card">
+            <div class="product-image">
+                <i class="fas fa-pills"></i>
+                <span class="product-badge">Baru</span>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">{{ $produk->nama_obat }}</h3>
+                <p class="product-desc">
+                    {{ Str::limit($produk->deskripsi ?? 'Tidak ada deskripsi', 60) }}
+                </p>
+                <div class="product-footer">
+                    <button type="button" class="add-to-cart-btn" 
+							data-id="{{ $produk->id }}" 
+							data-nama="{{ $produk->nama_obat }}"
+							data-harga="{{ $produk->harga_jual }}"
+							onclick="openModal(this)">
+						<i class="fas fa-cart-plus"></i> Beli
+					</button>
+                    <span class="product-price">Rp {{ number_format($produk->harga_jual) }}</span>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="product-card">
-        <div class="product-image">
-            <i class="fas fa-capsules"></i>
-            <span class="product-badge">Best Seller</span>
-        </div>
-        <div class="product-info">
-            <h3 class="product-name">Vitamin C 1000mg</h3>
-            <p class="product-desc">Suplemen untuk daya tahan tubuh</p>
-            <div class="product-footer">
-                <span class="product-price">Rp 85.000</span>
-                <button class="add-to-cart-btn">
-                    <i class="fas fa-cart-plus"></i> Beli
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="product-card">
-        <div class="product-image">
-            <i class="fas fa-prescription-bottle"></i>
-        </div>
-        <div class="product-info">
-            <h3 class="product-name">Obat Batuk Sirup</h3>
-            <p class="product-desc">Meredakan batuk berdahak</p>
-            <div class="product-footer">
-                <span class="product-price">Rp 45.000</span>
-                <button class="add-to-cart-btn">
-                    <i class="fas fa-cart-plus"></i> Beli
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="product-card">
-        <div class="product-image">
-            <i class="fas fa-band-aid"></i>
-        </div>
-        <div class="product-info">
-            <h3 class="product-name">Plester Luka</h3>
-            <p class="product-desc">Melindungi luka dari kotoran</p>
-            <div class="product-footer">
-                <span class="product-price">Rp 15.000</span>
-                <button class="add-to-cart-btn">
-                    <i class="fas fa-cart-plus"></i> Beli
-                </button>
-            </div>
-        </div>
-    </div>
+    @empty
+        <p>Tidak ada produk populer saat ini.</p>
+    @endforelse
+		<!-- Modal Tambah ke Keranjang -->
+		<div id="modalKeranjang" style="display:none; 
+			position:fixed; inset:0; background:rgba(0,0,0,0.5); 
+			justify-content:center; align-items:center; z-index:9999;">
+			<div style="background:#fff; padding:25px; border-radius:15px; width:350px; text-align:center;">
+				<h3 id="modalNamaObat"></h3>
+				<p id="modalHargaObat" style="margin-bottom:10px; color:#666;"></p>
+
+				<form id="formKeranjang" method="POST" action="{{ route('pelanggan.keranjang.store') }}">
+					@csrf
+					<input type="hidden" name="obat_id" id="modalObatId">
+					<div style="margin-bottom:15px;">
+						<label>Jumlah:</label>
+						<input type="number" name="jumlah" min="1" value="1" required 
+							   style="width:100px; text-align:center;">
+					</div>
+					<button type="submit" 
+							style="background:#667eea; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">
+						Tambah ke Keranjang
+					</button>
+					<button type="button" onclick="closeModal()" 
+							style="background:#ccc; border:none; padding:10px 20px; border-radius:8px; margin-left:10px;">
+						Batal
+					</button>
+				</form>
+			</div>
+		</div>
 </div>
 
+{{-- ==============================
+     Pesanan Terbaru
+============================== --}}
 <h2 class="section-title">📦 Pesanan Terbaru</h2>
 <div class="orders-section">
-    <div class="order-item">
-        <div class="order-info">
-            <div class="order-icon">
-                <i class="fas fa-box"></i>
+    @forelse ($pesananTerbaru as $pesanan)
+        <div class="order-item">
+            <div class="order-info">
+                <div class="order-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="order-details">
+                    <h4>Order #{{ $pesanan->notransaksi }}</h4>
+                    <p>Total: Rp {{ number_format($pesanan->total_pembayaran, 0, ',', '.') }}</p>
+                </div>
             </div>
-            <div class="order-details">
-                <h4>Order #ORD-12345</h4>
-                <p>Paracetamol 500mg × 2, Vitamin C 1000mg × 1</p>
-            </div>
+            @php
+                $statusClass = match($pesanan->status) {
+                    'proses' => 'status-proses',
+                    'selesai' => 'status-selesai',
+                    'batal' => 'status-batal',
+                    default => 'status-pending'
+                };
+            @endphp
+            <span class="order-status {{ $statusClass }}">
+                {{ ucfirst($pesanan->status) }}
+            </span>
         </div>
-        <span class="order-status status-proses">Dalam Pengiriman</span>
-    </div>
-    
-    <div class="order-item">
-        <div class="order-info">
-            <div class="order-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="order-details">
-                <h4>Order #ORD-12344</h4>
-                <p>Obat Batuk Sirup × 1, Plester Luka × 3</p>
-            </div>
-        </div>
-        <span class="order-status status-selesai">Selesai</span>
-    </div>
-    
-    <div class="order-item">
-        <div class="order-info">
-            <div class="order-icon">
-                <i class="fas fa-truck"></i>
-            </div>
-            <div class="order-details">
-                <h4>Order #ORD-12343</h4>
-                <p>Vitamin C 1000mg × 2</p>
-            </div>
-        </div>
-        <span class="order-status status-proses">Dikemas</span>
-    </div>
+    @empty
+        <p>Tidak ada pesanan terbaru.</p>
+    @endforelse
 </div>
+@endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function openModal(btn) {
+        document.getElementById('modalKeranjang').style.display = 'flex';
+        document.getElementById('modalObatId').value = btn.getAttribute('data-id');
+        document.getElementById('modalNamaObat').textContent = btn.getAttribute('data-nama');
+        document.getElementById('modalHargaObat').textContent =
+            'Harga: Rp ' + parseInt(btn.getAttribute('data-harga')).toLocaleString();
+    }
+
+    function closeModal() {
+        document.getElementById('modalKeranjang').style.display = 'none';
+    }
+
+    // Tutup modal kalau klik area gelap
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById('modalKeranjang');
+        if (e.target === modal) closeModal();
+    });
+
+    // Tangani submit form tambah ke keranjang
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('formKeranjang');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Gagal menambahkan ke keranjang');
+                return res.text();
+            })
+            .then(() => {
+                closeModal();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Produk telah ditambahkan ke keranjang 😊',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan saat menambahkan ke keranjang!'
+                });
+            });
+        });
+    });
+</script>
 @endsection

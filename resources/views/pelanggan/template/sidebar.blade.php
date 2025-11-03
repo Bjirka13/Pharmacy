@@ -152,7 +152,7 @@
                 <i class="fas fa-heartbeat"></i>
             </div>
             <div class="brand-text">
-                <h2>Apotek Online</h2>
+                <h2>Ghani Pharmacy</h2>
                 <p>Belanja Mudah & Aman</p>
             </div>
         </a>
@@ -162,7 +162,7 @@
         <div class="menu-item">
             <a href="{{ route('pelanggan.dashboard') }}" class="menu-link {{ request()->routeIs('pelanggan.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home menu-icon"></i>
-                <span class="menu-text">Dashboard</span>
+                <span class="menu-text">Home</span>
             </a>
         </div>
         
@@ -175,7 +175,7 @@
         </div>
         
         <div class="menu-item">
-            <a href="{{ route('pelanggan.keranjang') }}" class="menu-link {{ request()->routeIs('pelanggan.keranjang*') ? 'active' : '' }}">
+            <a href="{{ route('pelanggan.keranjang.index') }}" class="menu-link {{ request()->routeIs('pelanggan.keranjang*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart menu-icon"></i>
                 <span class="menu-text">Keranjang</span>
                 <span class="menu-badge">3</span>

@@ -1,246 +1,177 @@
-@extends('admin.template.master')
+@extends('pelanggan.template.master')
 
-@section('title', 'Data Supplier')
+@section('title', 'Pesanan Saya')
 
 @section('css')
 <style>
-    /* Dark Background */
-    .content-wrapper {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
-        min-height: 100vh;
+    .order-section {
+        background: #fff;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
     }
-    
-    /* Page Header Card */
-    .page-header-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 25px 30px;
-        border-radius: 15px;
-        margin-bottom: 25px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+    .order-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        transition: all 0.3s;
     }
-    
-    .page-header-card h1 {
-        font-size: 28px;
-        font-weight: 700;
+
+    .order-item:hover {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+        transform: translateX(5px);
+    }
+
+    .order-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .order-icon {
+        width: 60px;
+        height: 60px;
         background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+    }
+
+    .order-details h4 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .order-details p {
+        font-size: 13px;
+        color: #999;
         margin: 0;
     }
-    
-    .btn-add {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: #fff;
-        padding: 10px 25px;
-        border-radius: 10px;
+
+    .status-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 12px;
+        font-size: 12px;
         font-weight: 600;
-        border: none;
-        transition: all 0.3s;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        text-decoration: none !important;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        text-transform: capitalize;
     }
-    
-    .btn-add:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        color: #fff !important;
-        text-decoration: none !important;
-    }
-    
-    /* Table Card */
-    .table-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Modern Table */
-    .modern-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    .modern-table thead tr {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: #fff;
-    }
-    
-    .modern-table th {
-        padding: 15px;
-        text-align: left;
-        font-size: 13px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .modern-table td {
-        padding: 15px;
-        border-bottom: 1px solid #e0e0e0;
-        color: #333;
-        font-size: 14px;
-    }
-    
-    .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.05);
-    }
-    
-    .modern-table tbody tr:last-child td {
-        border-bottom: none;
-    }
-    
-    /* Action Buttons */
-    .btn-action {
-        padding: 8px 15px;
-        border-radius: 8px;
-        border: none;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.3s;
-        margin-right: 5px;
-    }
-    
-    .btn-edit {
-        background: linear-gradient(135deg, #ffc107, #e0a800);
-        color: #fff;
-    }
-    
-    .btn-edit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
-    }
-    
-    .btn-delete {
+
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-proses { background: #cce5ff; color: #004085; }
+    .status-selesai { background: #d4edda; color: #155724; }
+    .status-batal { background: #f8d7da; color: #721c24; }
+
+    .btn-cancel {
         background: linear-gradient(135deg, #dc3545, #c82333);
         color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
     }
-    
-    .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
-    }
-    
-    /* Content Header */
-    .content-header {
-        padding: 25px 15px 0 15px !important;
+
+    .btn-cancel:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
     }
 </style>
 @endsection
 
 @section('content')
-<div class="content-wrapper">
-    <div class="content-header">
-        <div class="container-fluid">
-            <!-- Page Header -->
-            <div class="page-header-card">
-                <h1>🚚 Data Supplier</h1>
-                <a href="{{ route('supplier.create') }}" class="btn-add">
-                    <i class="fas fa-plus"></i>
-                    <span>Tambah Supplier</span>
-                </a>
-            </div>
-        </div>
+<div class="welcome-banner mb-4">
+    <div class="welcome-content">
+        <h1>📦 Pesanan Saya</h1>
+        <p>Lihat dan kelola status pesanan Anda</p>
     </div>
+</div>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="table-card">
-                <div class="table-responsive">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Perusahaan</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($suppliers as $key => $supplier)
-                            <tr>
-                                <td><strong>{{ $key + 1 }}</strong></td>
-                                <td><strong>{{ $supplier->perusahaan }}</strong></td>
-                                <td>{{ $supplier->alamat }}</td>
-                                <td>{{ $supplier->telepon }}</td>
-                                <td>
-                                    <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn-action btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" class="btn-action btn-delete btn-delete-ajax" data-id="{{ $supplier->id }}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="text-center" style="padding: 40px;">
-                                    <i class="fas fa-truck" style="font-size: 48px; color: #ccc;"></i>
-                                    <p style="margin-top: 15px; color: #999;">Belum ada data supplier</p>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+<div class="order-section">
+    @forelse ($transaksi as $trx)
+        <div class="order-item" id="trx_{{ $trx->id }}">
+            <div class="order-info">
+                <div class="order-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="order-details">
+                    <h4>{{ $trx->notransaksi }}</h4>
+                    <p>Tanggal: {{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d M Y') }}</p>
+                    <p>Total: <strong>Rp{{ number_format($trx->total_pembayaran, 0, ',', '.') }}</strong></p>
+                    <span class="status-badge status-{{ strtolower($trx->status) }}">
+                        {{ ucfirst($trx->status) }}
+                    </span>
                 </div>
             </div>
+
+            <div>
+                @if ($trx->status === 'pending')
+                    <button class="btn-cancel btn-cancel-order" data-id="{{ $trx->id }}" data-url="{{ route('pelanggan.transaksi.batal', $trx->id) }}">
+                        <i class="fas fa-times me-1"></i> Batalkan
+                    </button>
+                @endif
+            </div>
         </div>
-    </section>
+    @empty
+        <div class="text-center py-4">
+            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">Belum ada pesanan 😅</h5>
+            <a href="{{ route('pelanggan.home') }}" class="text-primary fw-bold">Belanja Sekarang</a>
+        </div>
+    @endforelse
 </div>
 @endsection
 
-@section('js')
+@section('scripts')
 <script>
-    $(document).on('click', '.btn-delete-ajax', function(e) {
-        e.preventDefault();
-        
-        let id = $(this).data('id');
-        let row = $(this).closest('tr');
-        
-        if(confirm("Yakin ingin menghapus supplier ini?")) {
-            $.ajax({
-                type: "POST",
-                url: "/supplier/" + id,
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    _method: "DELETE"
-                },
-                success: function(response) {
-                    if (response.message) {
-                        showNotification('success', response.message);
-                    } else {
-                        showNotification('success', 'Supplier berhasil dihapus!');
+$(document).ready(function() {
+    // Batalkan pesanan
+    $('.btn-cancel-order').click(function() {
+        const id = $(this).data('id');
+        const url = $(this).data('url');
+        const row = $('#trx_' + id);
+
+        Swal.fire({
+            title: 'Batalkan pesanan ini?',
+            text: "Pesanan akan dibatalkan permanen.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, batalkan',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'PATCH'
+                    },
+                    success: function() {
+                        Swal.fire('Dibatalkan!', 'Pesanan berhasil dibatalkan.', 'success');
+                        row.fadeOut(400, function() { $(this).remove(); });
+                    },
+                    error: function() {
+                        Swal.fire('Gagal!', 'Terjadi kesalahan, coba lagi nanti.', 'error');
                     }
-                    
-                    row.fadeOut(300, function() {
-                        $(this).remove();
-                        updateRowNumbers();
-                    });
-                },
-                error: function(xhr) {
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        showNotification('error', xhr.responseJSON.message);
-                    } else {
-                        showNotification('error', 'Gagal menghapus supplier!');
-                    }
-                }
-            });
-        }
-    });
-    
-    function updateRowNumbers() {
-        $('tbody tr').each(function(index) {
-            $(this).find('td:first strong').text(index + 1);
+                });
+            }
         });
-    }
+    });
+});
 </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
 use App\Models\Obat;
+use App\Models\Keranjang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -25,40 +26,32 @@ class TransaksiController extends Controller
     }
 
     // =============================
-    // CREATE (PELANGGAN)
+    // PESANAN PELANGGAN (INDEX)
     // =============================
-    public function create()
+    public function pesananPelanggan()
     {
-        $obat = Obat::all();
-        return view('pelanggan.transaksi.create', compact('obat'));
+        $transaksi = Transaksi::with('detail.obat')
+            ->where('id_pelanggan', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('pelanggan.pesanan.index', compact('transaksi'));
     }
 
     // =============================
-    // STORE (PELANGGAN BUAT PESANAN)
+    // CHECKOUT dari KERANJANG
     // =============================
-    public function store(Request $request)
+    public function checkout(Request $request)
     {
-        $request->validate([
-            'obat_id.*' => 'required|exists:obats,id',
-            'jumlah.*'  => 'required|numeric|min:1',
-        ]);
+        $keranjang = Keranjang::with('obat')
+            ->where('user_id', Auth::id())
+            ->get();
 
-        $total = 0;
-        $items = [];
-
-        foreach ($request->obat_id as $index => $id) {
-            $obat = Obat::findOrFail($id);
-            $jumlah = $request->jumlah[$index];
-            $subtotal = $obat->harga * $jumlah;
-
-            $total += $subtotal;
-
-            $items[] = [
-                'obat_id' => $obat->id,
-                'jumlah'  => $jumlah,
-                'subtotal' => $subtotal,
-            ];
+        if ($keranjang->isEmpty()) {
+            return redirect()->route('pelanggan.keranjang')->with('error', 'Keranjang Anda kosong!');
         }
+
+        $total = $keranjang->sum(fn($item) => $item->obat->harga * $item->jumlah);
 
         $transaksi = Transaksi::create([
             'id_pelanggan' => Auth::id(),
@@ -68,31 +61,36 @@ class TransaksiController extends Controller
             'total_pembayaran' => $total,
         ]);
 
-        foreach ($items as $item) {
+        foreach ($keranjang as $item) {
             DetailTransaksi::create([
                 'transaksi_id' => $transaksi->id,
-                'obat_id' => $item['obat_id'],
-                'jumlah' => $item['jumlah'],
-                'subtotal' => $item['subtotal'],
+                'obat_id' => $item->obat_id,
+                'jumlah' => $item->jumlah,
+                'subtotal' => $item->obat->harga * $item->jumlah,
             ]);
         }
 
+        // Kosongkan keranjang setelah checkout
+        Keranjang::where('user_id', Auth::id())->delete();
+
         return redirect()
             ->route('pelanggan.pesanan')
-            ->with('success', 'Pesanan Anda berhasil dibuat!');
+            ->with('success', 'Pesanan berhasil dibuat!');
     }
 
     // =============================
-    // PELANGGAN: LIHAT PESANAN SENDIRI
+    // PEMBATALAN PESANAN (PELANGGAN)
     // =============================
-    public function pesananPelanggan()
+    public function batal(Request $request, $id)
     {
-        $transaksi = Transaksi::with('detail.obat')
+        $transaksi = Transaksi::where('id', $id)
             ->where('id_pelanggan', Auth::id())
-            ->latest()
-            ->get();
+            ->where('status', 'pending')
+            ->firstOrFail();
 
-        return view('pelanggan.pesanan', compact('transaksi'));
+        $transaksi->update(['status' => 'batal']);
+
+        return response()->json(['success' => true]);
     }
 
     // =============================
@@ -105,30 +103,17 @@ class TransaksiController extends Controller
     }
 
     // =============================
-    // UPDATE (ADMIN & PELANGGAN)
+    // UPDATE (ADMIN)
     // =============================
     public function update(Request $request, $id)
     {
         $transaksi = Transaksi::findOrFail($id);
 
-        // ADMIN ubah status secara bebas
-        if (Auth::user()->hak_akses === 'admin') {
-            $request->validate([
-                'status' => 'required|in:pending,proses,selesai,batal',
-            ]);
-            $transaksi->update([
-                'status' => $request->status,
-            ]);
-        } 
-        // PELANGGAN hanya bisa batalkan
-        elseif (Auth::user()->hak_akses === 'pelanggan') {
-            if ($transaksi->id_pelanggan != Auth::id()) {
-                abort(403, 'Anda tidak memiliki akses untuk pesanan ini.');
-            }
-            $transaksi->update([
-                'status' => 'batal',
-            ]);
-        }
+        $request->validate([
+            'status' => 'required|in:pending,proses,selesai,batal',
+        ]);
+
+        $transaksi->update(['status' => $request->status]);
 
         return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui!');
     }
@@ -142,6 +127,7 @@ class TransaksiController extends Controller
         $transaksi->detail()->delete();
         $transaksi->delete();
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dihapus!');
+        return redirect()->route('admin.transaksi.index')
+            ->with('success', 'Transaksi berhasil dihapus!');
     }
 }

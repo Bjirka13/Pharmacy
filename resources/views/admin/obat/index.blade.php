@@ -183,6 +183,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Obat</th>
+								<th>Deskripsi</th>
                                 <th>Expired</th>
                                 <th>Harga Beli</th>
                                 <th>Harga Jual</th>
@@ -196,6 +197,7 @@
                             <tr>
                                 <td><strong>{{ $loop->iteration }}</strong></td>
                                 <td><strong>{{ $obat->nama }}</strong></td>
+								<td>{{ $obat->deskripsi }}</td>
                                 <td>
                                     @php
                                         $expiredDate = \Carbon\Carbon::parse($obat->expired);

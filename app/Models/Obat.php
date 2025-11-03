@@ -11,7 +11,7 @@ class Obat extends Model
     protected $table = 'obats';
     
     // TAMBAHKAN 'harga' di fillable
-    protected $fillable = ['nama', 'expired', 'harga_beli', 'harga_jual', 'harga', 'stok', 'id_supplier'];
+    protected $fillable = ['nama', 'deskripsi', 'expired', 'harga_beli', 'harga_jual', 'stok', 'id_supplier'];
 
     public function supplier()
     {

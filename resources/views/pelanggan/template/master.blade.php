@@ -73,6 +73,7 @@
             document.querySelector('.sidebar').classList.toggle('active');
         }
     </script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('js')
 </body>
 </html>

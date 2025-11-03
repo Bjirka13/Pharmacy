@@ -148,7 +148,7 @@
                                 </td>
                                 <td>Rp {{ number_format($transaksi->total_pembayaran, 0, ',', '.') }}</td>
                                 <td>
-                                    <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn-action btn-edit">
+                                    <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn-action btn-edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" class="btn-action btn-delete btn-delete-ajax" data-id="{{ $transaksi->id }}">

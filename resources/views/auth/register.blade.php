@@ -6,7 +6,7 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-logo">
-      <h1><i class="fas fa-hospital"></i> Sistem Apotek</h1>
+      <h1><i class="fas fa-hospital"></i> Ghani Pharmacy</h1>
       <p>Buat akun baru</p>
     </div>
     

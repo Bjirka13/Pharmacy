@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\KeranjangController;
 
 // -----------------------------
 // HALAMAN AUTH (LOGIN & REGISTER)
@@ -74,8 +75,16 @@ Route::prefix('pelanggan')->name('pelanggan.')->middleware('auth')->group(functi
     Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
     Route::put('/transaksi/{id}/batal', [TransaksiController::class, 'update'])->name('transaksi.batal');
+	Route::post('/transaksi/beli', [TransaksiController::class, 'beli'])->name('transaksi.beli');
 
-    Route::get('/keranjang', [UserController::class, 'pelanggan_keranjang'])->name('keranjang');
+    // Keranjang pelanggan
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang', [KeranjangController::class, 'store'])->name('keranjang.store');
+	Route::put('/keranjang/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+	Route::delete('/keranjang/{id}', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
+    Route::post('/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+    
+	
     Route::get('/profil', [UserController::class, 'pelanggan_profil'])->name('profil');
 });
 

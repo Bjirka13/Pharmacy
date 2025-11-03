@@ -1,6 +1,6 @@
 @extends('admin.template.master')
 
-@section('title', 'Edit Obat')
+@section('title', 'Edit Transaksi')
 
 @section('css')
 <style>
@@ -129,9 +129,9 @@
             <!-- Page Header -->
             <div class="page-header-card">
                 <div>
-                    <h1>✏️ Edit {{ $menu }}</h1>
+                    <h1>✏️ Edit Transaksi</h1>
                 </div>
-                <a href="{{ route('obat.index') }}" class="btn-back">
+                <a href="{{ route('admin.transaksi.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>
@@ -144,70 +144,23 @@
                 <!-- Info Badge -->
                 <div class="info-badge">
                     <i class="fas fa-info-circle mr-2"></i>
-                    <strong>Info:</strong> Anda sedang mengedit data obat <strong>{{ $obat->nama }}</strong>
+                    <strong>Info:</strong> Anda sedang mengedit transaksi <strong>{{ $transaksi->notransaksi }}</strong>
                 </div>
                 
-                <form id="form-obat">
+                <form id="form-transaksi">
                     @csrf
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="nama">Nama Obat <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama" id="nama" value="{{ $obat->nama }}" placeholder="Masukkan nama obat" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="expired">Tanggal Kedaluwarsa <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="expired" id="expired" value="{{ $obat->expired }}" required>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="status">Status Transaksi <span class="text-danger">*</span></label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="proses" {{ $transaksi->status == 'proses' ? 'selected' : '' }}>Proses</option>
+                            <option value="selesai" {{ $transaksi->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        </select>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="harga_beli">Harga Beli (Rp) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="harga_beli" id="harga_beli" value="{{ $obat->harga_beli }}" placeholder="0" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="harga_jual">Harga Jual (Rp) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="harga_jual" id="harga_jual" value="{{ $obat->harga_jual }}" placeholder="0" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="stok">Stok <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="stok" id="stok" value="{{ $obat->stok }}" placeholder="0" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_supplier">Supplier <span class="text-danger">*</span></label>
-                                <select name="id_supplier" id="id_supplier" class="form-control" required>
-                                    <option value="">-- Pilih Supplier --</option>
-                                    @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id_supplier }}" {{ $supplier->id == $obat->id_supplier ? 'selected' : '' }}>
-                                            {{ $supplier->perusahaan }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <div class="text-right mt-4">
                         <button type="submit" class="btn-submit" id="btnSubmit">
-                            <i class="fas fa-save mr-2"></i>Update Obat
+                            <i class="fas fa-save mr-2"></i>Update Status
                         </button>
                     </div>
                 </form>
@@ -220,7 +173,7 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        $('#form-obat').submit(function(e) {
+        $('#form-transaksi').submit(function(e) {
             e.preventDefault();
             
             let btnSubmit = $('#btnSubmit');
@@ -228,27 +181,17 @@
             
             $.ajax({
                 type: "POST",
-                url: "{{ route('obat.update', $obat->id) }}",
+                url: "{{ route('admin.transaksi.update', $transaksi->id) }}",
                 data: $(this).serialize() + "&_method=PUT",
                 success: function(response) {
-                    if (response.message) {
-                        showNotification('success', response.message);
-                    } else {
-                        showNotification('success', 'Obat berhasil diupdate!');
-                    }
-                    
+                    showNotification('success', 'Status transaksi berhasil diperbarui!');
                     setTimeout(function() {
-                        window.location.href = "{{ route('obat.index') }}";
+                        window.location.href = "{{ route('admin.transaksi.index') }}";
                     }, 1000);
                 },
                 error: function(xhr) {
-                    btnSubmit.prop('disabled', false).html('<i class="fas fa-save mr-2"></i>Update Obat');
-                    
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        showNotification('error', xhr.responseJSON.message);
-                    } else {
-                        showNotification('error', 'Gagal mengupdate obat!');
-                    }
+                    btnSubmit.prop('disabled', false).html('<i class="fas fa-save mr-2"></i>Update Status');
+                    showNotification('error', 'Gagal memperbarui status transaksi!');
                 }
             });
         });

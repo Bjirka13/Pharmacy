@@ -154,6 +154,13 @@
                                 <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama obat" required>
                             </div>
                         </div>
+						
+						<div class="col-md-6">
+                            <div class="form-group">
+                                <label for="deskripsi">Deskripsi Obat <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="deskripsi" id="deskripsi" placeholder="Masukkan deskripsi obat" required>
+                            </div>
+                        </div>
                         
                         <div class="col-md-6">
                             <div class="form-group">

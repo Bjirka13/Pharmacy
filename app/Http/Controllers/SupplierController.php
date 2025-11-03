@@ -3,20 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Obat;
+use \App\Models\DetailTransaksi;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class SupplierController extends Controller
 {
-    public function index()
-    {
+	public function index()
+	{
+		// Ini untuk ADMIN melihat daftar semua supplier
 		$menu = 'Supplier';
 		$subMenu = 'Data Supplier';
-        $suppliers = Supplier::with('user')->get();
-        return view('admin.supplier.index', compact('suppliers', 'menu', 'subMenu'));
-    }
+		$suppliers = Supplier::with('user')->get();
+		return view('admin.supplier.index', compact('menu', 'subMenu', 'suppliers'));
+	}
+	
+	public function dashboard()
+	{
+		$menu = 'Supplier';
+		$supplier = Supplier::where('id_user', Auth::id())->first();
+
+		$totalProduk = Obat::where('id_supplier', $supplier->id_supplier)->count();
+
+		$transaksiAktif = DetailTransaksi::whereHas('obat', function($q) use ($supplier) {
+				$q->where('id_supplier', $supplier->id);
+			})
+			->whereHas('transaksi', function($q) {
+				$q->whereIn('status', ['proses', 'selesai']);
+			})
+			->count();
+
+		$pendingOrder = DetailTransaksi::whereHas('obat', function($q) use ($supplier) {
+				$q->where('id_supplier', $supplier->id);
+			})
+			->whereHas('transaksi', function($q) {
+				$q->where('status', 'pending');
+			})
+			->count();
+
+		$stokMenipis = Obat::where('id_supplier', $supplier->id)
+			->where('stok', '<', 10)
+			->count();
+
+		$transaksiTerbaru = Transaksi::with(['detail.obat', 'pelanggan'])
+			->whereHas('detail.obat', function($q) use ($supplier) {
+				$q->where('id_supplier', $supplier->id);
+			})
+			->latest()
+			->take(5)
+			->get();
+
+		$subMenu = 'Data Supplier';
+
+		return view('supplier.dashboard', compact(
+			'menu',
+			'subMenu',
+			'totalProduk',
+			'transaksiAktif',
+			'pendingOrder',
+			'stokMenipis',
+			'transaksiTerbaru'
+		));
+	}
+
 
     public function create()
     {

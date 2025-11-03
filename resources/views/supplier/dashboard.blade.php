@@ -224,7 +224,7 @@
                 <i class="fas fa-box"></i>
             </div>
         </div>
-        <div class="stat-value">284</div>
+        <div class="stat-value">{{ $totalProduk }}</div>
         <div class="stat-change"><i class="fas fa-arrow-up"></i> +12 bulan ini</div>
     </div>
     
@@ -237,7 +237,7 @@
                 <i class="fas fa-receipt"></i>
             </div>
         </div>
-        <div class="stat-value">47</div>
+        <div class="stat-value">{{ $transaksiAktif }}</div>
         <div class="stat-change"><i class="fas fa-arrow-up"></i> +5 hari ini</div>
     </div>
     
@@ -250,7 +250,7 @@
                 <i class="fas fa-clock"></i>
             </div>
         </div>
-        <div class="stat-value">8</div>
+        <div class="stat-value">{{ $pendingOrder }}</div>
         <div class="stat-change">Perlu segera diproses</div>
     </div>
     
@@ -263,7 +263,7 @@
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
         </div>
-        <div class="stat-value">12</div>
+        <div class="stat-value">{{ $stokMenipis }}</div>
         <div class="stat-change">Perlu restock</div>
     </div>
 </div>
@@ -286,35 +286,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>#ORD-2847</td>
-                    <td>Apotek Sehat</td>
-                    <td>Paracetamol 500mg</td>
-                    <td>Rp 2.450.000</td>
-                    <td><span class="badge badge-success">Selesai</span></td>
-                </tr>
-                <tr>
-                    <td>#ORD-2846</td>
-                    <td>Klinik Bersama</td>
-                    <td>Amoxicillin 500mg</td>
-                    <td>Rp 1.850.000</td>
-                    <td><span class="badge badge-warning">Proses</span></td>
-                </tr>
-                <tr>
-                    <td>#ORD-2845</td>
-                    <td>RS Medika</td>
-                    <td>Vitamin C 1000mg</td>
-                    <td>Rp 950.000</td>
-                    <td><span class="badge badge-success">Selesai</span></td>
-                </tr>
-                <tr>
-                    <td>#ORD-2844</td>
-                    <td>Apotek Farma</td>
-                    <td>Obat Batuk Sirup</td>
-                    <td>Rp 1.250.000</td>
-                    <td><span class="badge badge-warning">Proses</span></td>
-                </tr>
-            </tbody>
+				@forelse ($transaksiTerbaru as $trx)
+					<tr>
+						<td>#{{ $trx->notransaksi }}</td>
+						<td>{{ $trx->pelanggan->nama ?? 'Tidak Diketahui' }}</td>
+						<td>{{ $trx->detail->first()->obat->nama ?? '-' }}</td>
+						<td>Rp {{ number_format($trx->total_pembayaran, 0, ',', '.') }}</td>
+						<td>
+							@if($trx->status == 'selesai')
+								<span class="badge badge-success">Selesai</span>
+							@elseif($trx->status == 'proses')
+								<span class="badge badge-warning">Proses</span>
+							@else
+								<span class="badge badge-secondary">{{ ucfirst($trx->status) }}</span>
+							@endif
+						</td>
+					</tr>
+				@empty
+					<tr>
+						<td colspan="5" class="text-center text-muted">Belum ada transaksi</td>
+					</tr>
+				@endforelse
+			</tbody>
         </table>
     </div>
     

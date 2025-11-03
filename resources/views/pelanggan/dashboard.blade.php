@@ -307,11 +307,6 @@
     </div>
 </div>
 
-{{-- Statistik Pesanan --}}
-<div class="stats-grid">
-    {{-- ... (bagian statistik tetap sama) --}}
-</div>
-
 {{-- ==============================
      Produk Populer
 ============================== --}}
@@ -350,7 +345,6 @@
 			<div style="background:#fff; padding:25px; border-radius:15px; width:350px; text-align:center;">
 				<h3 id="modalNamaObat"></h3>
 				<p id="modalHargaObat" style="margin-bottom:10px; color:#666;"></p>
-
 				<form id="formKeranjang" method="POST" action="{{ route('pelanggan.keranjang.store') }}">
 					@csrf
 					<input type="hidden" name="obat_id" id="modalObatId">

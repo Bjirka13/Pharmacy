@@ -133,7 +133,7 @@
                 <i class="fas fa-pills"></i>
             </div>
             <div class="brand-text">
-                <h2>Sistem Apotek</h2>
+                <h2>Ghani Pharmacy</h2>
                 <p>Supplier Panel</p>
             </div>
         </a>
@@ -155,7 +155,7 @@
         </div>
         
         <div class="menu-item">
-            <a href="{{ route('supplier.transaksi') }}" class="menu-link {{ request()->routeIs('supplier.transaksi*') ? 'active' : '' }}">
+            <a href="{{ route('supplier.transaksi.index') }}" class="menu-link {{ request()->routeIs('supplier.transaksi*') ? 'active' : '' }}">
                 <i class="fas fa-receipt menu-icon"></i>
                 <span>Transaksi</span>
             </a>

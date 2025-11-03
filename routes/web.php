@@ -56,10 +56,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 // SUPPLIER
 // -----------------------------
 Route::prefix('supplier')->name('supplier.')->middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/produk', [UserController::class, 'supplier_produk'])->name('produk');
-    Route::get('/transaksi', [UserController::class, 'supplier_transaksi'])->name('transaksi.index');
-    Route::get('/profil', [UserController::class, 'supplier_profil'])->name('profil');
+    Route::get('/dashboard', [SupplierController::class, 'dashboard'])->name('dashboard');
+    Route::get('/produk', [SupplierController::class, 'supplier_produk'])->name('produk');
+    Route::get('/transaksi', [SupplierController::class, 'supplier_transaksi'])->name('transaksi.index');
+    Route::get('/profil', [SupplierController::class, 'supplier_profil'])->name('profil');
 });
 
 // -----------------------------

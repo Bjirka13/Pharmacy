@@ -107,6 +107,8 @@
         border-radius: 10px;
         margin-bottom: 25px;
         border-left: 4px solid #667eea;
+		color: #667eea;
+		font-weight: 600;
     }
     
     .info-badge strong {
@@ -194,7 +196,7 @@
                                 <select name="id_supplier" id="id_supplier" class="form-control" required>
                                     <option value="">-- Pilih Supplier --</option>
                                     @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}" {{ $supplier->id == $obat->id_supplier ? 'selected' : '' }}>
+                                        <option value="{{ $supplier->id_supplier }}" {{ $supplier->id == $obat->id_supplier ? 'selected' : '' }}>
                                             {{ $supplier->perusahaan }}
                                         </option>
                                     @endforeach

@@ -173,13 +173,13 @@
                                 <td>{{ $supplier->alamat }}</td>
                                 <td>{{ $supplier->telepon }}</td>
                                 <td>
-                                    <a href="{{ url('admin/supplier/' . $supplier->id . '/edit') }}" class="btn-action btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" class="btn-action btn-delete btn-delete-ajax" data-id="{{ $supplier->id }}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
+									<a href="{{ route('admin.supplier.edit', $supplier->id_supplier) }}" class="btn-action btn-edit">
+										<i class="fas fa-edit"></i>
+									</a>
+									<button type="button" class="btn-action btn-delete btn-delete-ajax" data-id="{{ $supplier->id_supplier }}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</td>
                             </tr>
                             @empty
                             <tr>

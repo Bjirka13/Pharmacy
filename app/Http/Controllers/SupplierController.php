@@ -88,10 +88,13 @@ class SupplierController extends Controller
 	}
 	
 	public function edit($id) 
-	{
-		$supplier = Supplier::findOrFail($id); $menu = 'Supplier'; $subMenu = 'Edit'; return view('admin.supplier.edit', compact('supplier', 'menu', 'subMenu')); 
-		
-	} 
+{
+    $supplier = Supplier::with('user')->findOrFail($id);
+    
+    $menu = 'Supplier';
+    $subMenu = 'Edit';
+    return view('admin.supplier.edit', compact('supplier', 'menu', 'subMenu'));
+} 
 	
 	public function update(Request $request, $id) 
 	{ 

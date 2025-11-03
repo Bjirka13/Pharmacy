@@ -1,6 +1,6 @@
 @extends('admin.template.master')
 
-@section('title', 'Tambah Supplier')
+@section('title', 'Tambah Obat')
 
 @section('css')
 <style>
@@ -69,6 +69,12 @@
         border-bottom: 2px solid #e0e0e0;
     }
     
+    /* Section Separator */
+    .section-separator {
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+    
     /* Form Style */
     .form-group label {
         font-weight: 600;
@@ -126,7 +132,7 @@
                 <div>
                     <h1>➕ Tambah {{ $menu }}</h1>
                 </div>
-                <a href="{{ route('supplier.index') }}" class="btn-back">
+                <a href="{{ route('obat.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>
@@ -136,61 +142,72 @@
     <section class="content">
         <div class="container-fluid">
             <div class="form-card">
-                <form method="post" id="form-supplier">
+                <form method="post" id="form-obat">
                     @csrf
                     
-                    <!-- Informasi Login -->
-                    <h5 class="section-title">👤 Informasi Login Supplier</h5>
+                    <!-- Informasi Obat -->
+                    <h5 class="section-title">💊 Informasi Obat</h5>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="name">Nama Lengkap <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Masukkan nama lengkap" required>
+                                <label for="nama">Nama Obat <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan nama obat" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="email">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="supplier@example.com" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="password">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Minimal 6 karakter" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Data Supplier -->
-                    <h5 class="section-title mt-4">🏢 Data Supplier</h5>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="perusahaan">Nama Perusahaan <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="perusahaan" id="perusahaan" placeholder="PT. Nama Perusahaan" required>
+                                <label for="expired">Tanggal Kedaluwarsa <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="expired" id="expired" required>
                             </div>
                         </div>
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="alamat">Alamat <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="alamat" id="alamat" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+                                <label for="stok">Stok <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="stok" id="stok" placeholder="0" min="0" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telepon">Telepon <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="telepon" id="telepon" placeholder="08xxxxxxxxxx" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="15" required>
+                                <label for="id_supplier">Supplier <span class="text-danger">*</span></label>
+                                <select name="id_supplier" id="id_supplier" class="form-control" required>
+                                    <option value="">-- Pilih Supplier --</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id_supplier }}">{{ $supplier->perusahaan }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informasi Harga -->
+                    <div class="section-separator">
+                        <h5 class="section-title">💰 Informasi Harga</h5>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harga_beli">Harga Beli (Rp) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="harga_beli" id="harga_beli" placeholder="0" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harga_jual">Harga Jual (Rp) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="harga_jual" id="harga_jual" placeholder="0" min="0" required>
                             </div>
                         </div>
                     </div>
                     
                     <div class="text-right mt-4">
                         <button type="submit" class="btn-submit" id="btnSubmit">
-                            <i class="fas fa-save mr-2"></i>Simpan Supplier
+                            <i class="fas fa-save mr-2"></i>Simpan Obat
                         </button>
                     </div>
                 </form>
@@ -203,29 +220,33 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        $('#form-supplier').submit(function(e) {
+        // Set minimum date untuk tanggal kedaluwarsa (hari ini)
+        var today = new Date().toISOString().split('T')[0];
+        $('#expired').attr('min', today);
+        
+        $('#form-obat').submit(function(e) {
             e.preventDefault();
             
             let btnSubmit = $('#btnSubmit');
             btnSubmit.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
             
             $.ajax({
-                url: '{{ route("supplier.store") }}',
-                type: 'POST',
+                type: "POST",
+                url: "{{ route('obat.store') }}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.message) {
                         showNotification('success', response.message);
                     } else {
-                        showNotification('success', 'Supplier berhasil ditambahkan!');
+                        showNotification('success', 'Obat berhasil ditambahkan!');
                     }
                     
                     setTimeout(function() {
-                        window.location.href = "{{ route('supplier.index') }}";
+                        window.location.href = "{{ route('obat.index') }}";
                     }, 1000);
                 },
                 error: function(xhr) {
-                    btnSubmit.prop('disabled', false).html('<i class="fas fa-save mr-2"></i>Simpan Supplier');
+                    btnSubmit.prop('disabled', false).html('<i class="fas fa-save mr-2"></i>Simpan Obat');
                     
                     if (xhr.responseJSON && xhr.responseJSON.errors) {
                         let errors = xhr.responseJSON.errors;
@@ -237,10 +258,22 @@
                     } else if (xhr.responseJSON && xhr.responseJSON.message) {
                         showNotification('error', xhr.responseJSON.message);
                     } else {
-                        showNotification('error', 'Terjadi kesalahan pada server!');
+                        showNotification('error', 'Gagal menambahkan obat!');
                     }
                 }
             });
+        });
+        
+        // Auto calculate profit margin
+        $('#harga_beli, #harga_jual').on('input', function() {
+            let hargaBeli = parseFloat($('#harga_beli').val()) || 0;
+            let hargaJual = parseFloat($('#harga_jual').val()) || 0;
+            
+            if (hargaBeli > 0 && hargaJual < hargaBeli) {
+                $('#harga_jual').css('border-color', '#dc3545');
+            } else {
+                $('#harga_jual').css('border-color', '#e0e0e0');
+            }
         });
     });
 </script>

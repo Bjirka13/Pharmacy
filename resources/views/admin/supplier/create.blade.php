@@ -69,6 +69,12 @@
         border-bottom: 2px solid #e0e0e0;
     }
     
+    /* Section Separator */
+    .section-separator {
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+    
     /* Form Style */
     .form-group label {
         font-weight: 600;
@@ -163,7 +169,10 @@
                     </div>
                     
                     <!-- Data Supplier -->
-                    <h5 class="section-title mt-4">🏢 Data Supplier</h5>
+                    <div class="section-separator">
+                        <h5 class="section-title">🏢 Data Supplier</h5>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">

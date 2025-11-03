@@ -66,6 +66,8 @@
         border-radius: 10px;
         margin-bottom: 25px;
         border-left: 4px solid #667eea;
+		color: #667eea;
+		font-weight: 600;
     }
     
     .info-badge strong {
@@ -196,7 +198,7 @@
             
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin.supplier.update', $supplier->id) }}",
+                url: "{{ route('admin.supplier.update', $supplier->id_supplier) }}",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.message) {

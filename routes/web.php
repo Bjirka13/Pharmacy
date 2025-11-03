@@ -39,7 +39,16 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
     // Admin Supplier Resource - Ini akan membuat semua route CRUD
-    Route::resource('supplier', SupplierController::class);
+    // Ganti dari:
+	Route::resource('supplier', SupplierController::class);
+
+	// Jadi pakai nama yang lebih spesifik:
+	Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+	Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
+	Route::post('/supplier', [SupplierController::class, 'store'])->name('supplier.store');
+	Route::get('/supplier/{id_supplier}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+	Route::put('/supplier/{id_supplier}', [SupplierController::class, 'update'])->name('supplier.update');
+	Route::delete('/supplier/{id_supplier}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 });
 
 // -----------------------------

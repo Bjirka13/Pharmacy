@@ -59,6 +59,22 @@
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
     
+    /* Section Title */
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    /* Section Separator */
+    .section-separator {
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+    
     /* Form Style */
     .form-group label {
         font-weight: 600;
@@ -129,6 +145,8 @@
                 <form method="post" id="form-obat">
                     @csrf
                     
+                    <!-- Informasi Obat -->
+                    <h5 class="section-title">💊 Informasi Obat</h5>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -148,24 +166,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="harga_beli">Harga Beli (Rp) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="harga_beli" id="harga_beli" placeholder="0" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="harga_jual">Harga Jual (Rp) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="harga_jual" id="harga_jual" placeholder="0" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label for="stok">Stok <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="stok" id="stok" placeholder="0" required>
+                                <input type="number" class="form-control" name="stok" id="stok" placeholder="0" min="0" required>
                             </div>
                         </div>
                         
@@ -175,9 +177,30 @@
                                 <select name="id_supplier" id="id_supplier" class="form-control" required>
                                     <option value="">-- Pilih Supplier --</option>
                                     @foreach ($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ $supplier->perusahaan }}</option>
+                                        <option value="{{ $supplier->id_supplier }}">{{ $supplier->perusahaan }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informasi Harga -->
+                    <div class="section-separator">
+                        <h5 class="section-title">💰 Informasi Harga</h5>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harga_beli">Harga Beli (Rp) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="harga_beli" id="harga_beli" placeholder="0" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="harga_jual">Harga Jual (Rp) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="harga_jual" id="harga_jual" placeholder="0" min="0" required>
                             </div>
                         </div>
                     </div>
@@ -197,6 +220,10 @@
 @section('js')
 <script>
     $(document).ready(function() {
+        // Set minimum date untuk tanggal kedaluwarsa (hari ini)
+        var today = new Date().toISOString().split('T')[0];
+        $('#expired').attr('min', today);
+        
         $('#form-obat').submit(function(e) {
             e.preventDefault();
             
@@ -221,13 +248,32 @@
                 error: function(xhr) {
                     btnSubmit.prop('disabled', false).html('<i class="fas fa-save mr-2"></i>Simpan Obat');
                     
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMsg = '';
+                        for (let key in errors) {
+                            errorMsg += errors[key][0] + '<br>';
+                        }
+                        showNotification('error', errorMsg);
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
                         showNotification('error', xhr.responseJSON.message);
                     } else {
                         showNotification('error', 'Gagal menambahkan obat!');
                     }
                 }
             });
+        });
+        
+        // Auto calculate profit margin
+        $('#harga_beli, #harga_jual').on('input', function() {
+            let hargaBeli = parseFloat($('#harga_beli').val()) || 0;
+            let hargaJual = parseFloat($('#harga_jual').val()) || 0;
+            
+            if (hargaBeli > 0 && hargaJual < hargaBeli) {
+                $('#harga_jual').css('border-color', '#dc3545');
+            } else {
+                $('#harga_jual').css('border-color', '#e0e0e0');
+            }
         });
     });
 </script>

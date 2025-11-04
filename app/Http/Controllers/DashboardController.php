@@ -16,24 +16,31 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // ADMIN Dashboard
-        if ($user->hak_akses === 'admin') {
-            $totalSupplier = Supplier::count();
-            $totalObat = Obat::count();
-            $totalPelanggan = User::where('hak_akses', 'pelanggan')->count();
-            $stokMenipis = Obat::where('stok', '<', 10)->count();
-            $obatExpired = Obat::where('expired', '<=', now()->addDays(30))->count();
+		if ($user->hak_akses === 'admin') {
+			$supplier = Supplier::where('id_user', Auth::id())->first();
+			$totalSupplier = Supplier::count();
+			$totalObat = Obat::count();
+			$totalPelanggan = User::where('hak_akses', 'pelanggan')->count();
+			$stokMenipis = Obat::where('stok', '<', 10)->count();
+			$obatExpired = Obat::where('expired', '<=', now()->addDays(30))->count();
 
-            $totalNotifikasi = $stokMenipis + $obatExpired;
+			$totalNotifikasi = $stokMenipis + $obatExpired;
 
-            return view('admin.dashboard', compact(
-                'totalSupplier',
-                'totalObat',
-                'totalPelanggan',
-                'stokMenipis',
-                'obatExpired',
-                'totalNotifikasi'
-            ));
-        }
+			$transaksiTerbaru = Transaksi::with(['detail.obat', 'pelanggan'])
+				->latest()
+				->take(5)
+				->get();
+
+			return view('admin.dashboard', compact(
+				'totalSupplier',
+				'totalObat',
+				'totalPelanggan',
+				'stokMenipis',
+				'obatExpired',
+				'totalNotifikasi',
+				'transaksiTerbaru'
+			));
+		}
 
         // SUPPLIER Dashboard
         if ($user->hak_akses === 'supplier') {

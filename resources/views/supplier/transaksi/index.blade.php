@@ -95,56 +95,58 @@
 
 @section('content')
 <div class="container mt-4">
-    <h4 class="text-teal-400 mb-4"><i class="fas fa-receipt"></i> Riwayat Transaksi</h4>
-
-    <div class="card bg-dark text-light shadow">
-        <div class="card-body">
-            <h6 class="text-muted mb-3">Daftar Transaksi Produk Anda</h6>
-            <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle">
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th>No</th>
-                            <th>No Transaksi</th>
-                            <th>Tanggal</th>
-                            <th>Pelanggan</th>
-                            <th>Produk</th>
-                            <th>Status</th>
-                            <th>Total Pembayaran</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($transaksis as $key => $t)
-                            <tr class="text-center">
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $t->id }}</td>
-                                <td>{{ $t->tanggal_transaksi ? $t->tanggal_transaksi->format('d M Y') : '-' }}</td>
-                                <td>{{ $t->pelanggan->name ?? '-' }}</td>
-                                <td>
-                                    @foreach($t->detailTransaksi as $detail)
-                                        <span class="badge bg-info text-dark">{{ $detail->obat->nama ?? '-' }}</span>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <span class="badge 
-                                        @if($t->status == 'Selesai') bg-success 
-                                        @elseif($t->status == 'Proses') bg-warning 
-                                        @elseif($t->status == 'Batal') bg-danger 
-                                        @else bg-secondary @endif">
-                                        {{ ucfirst($t->status) }}
-                                    </span>
-                                </td>
-                                <td>Rp {{ number_format($t->total_pembayaran, 0, ',', '.') }}</td>
-                            </tr>
-                        @empty
-                            <tr class="text-center">
-                                <td colspan="7" class="text-muted py-4">Belum ada transaksi untuk produk Anda.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <h4 style="color:#4ecca3; margin-bottom:15px;">Daftar Transaksi</h4>
+	
+	<section class="content">
+		<div class="container-fluid">
+			<div class="data-table-card">
+				<div class="card-header">
+                    <h3 class="card-title">Riwayat Transaksi Pelanggan</h3>
+                </div>
+				
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>ID Transaksi</th>
+							<th>Tanggal Transaksi</th>
+							<th>Pelanggan</th>
+							<th>Daftar Obat</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($transaksis as $key => $t)
+							<tr class="text-center">
+								<td>{{ $key + 1 }}</td>
+								<td>{{ $t->id }}</td>
+								<td>{{ \Carbon\Carbon::parse($t->tanggal_transaksi)->format('d M Y') ?? '-' }}</td>
+								<td>{{ $t->pelanggan->name ?? '-' }}</td>
+								<td>
+									@if($t->detail && count($t->detail) > 0)
+										@foreach($t->detail as $detail)
+											<span class="badge bg-info text-dark">{{ $detail->obat->nama ?? '-' }}</span>
+										@endforeach
+									@else
+										<span class="text-muted">Tidak ada obat</span>
+									@endif
+								</td>
+								<td>
+									<span class="badge 
+										{{ $t->status == 'pending' ? 'bg-warning' : ($t->status == 'proses' ? 'bg-info' : 'bg-success') }}">
+										{{ ucfirst($t->status) }}
+									</span>
+								</td>
+							</tr>
+						@empty
+							<tr>
+								<td colspan="6" class="text-center text-muted">Belum ada transaksi.</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
 </div>
 @endsection

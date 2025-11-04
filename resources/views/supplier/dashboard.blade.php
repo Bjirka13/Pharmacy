@@ -251,7 +251,7 @@
             </div>
         </div>
         <div class="stat-value">{{ $pendingOrder }}</div>
-        <div class="stat-change">Perlu segera diproses</div>
+        <div class="stat-change">Menunggu Konfirmasi Admin</div>
     </div>
     
     <div class="stat-card">
@@ -268,93 +268,49 @@
     </div>
 </div>
 
-<div class="content-grid">
-    <div class="data-table-card">
-        <div class="card-header">
-            <h3 class="card-title">Transaksi Terbaru</h3>
-            <button class="action-btn">Lihat Semua</button>
-        </div>
-        
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID Order</th>
-                    <th>Customer</th>
-                    <th>Produk</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-				@forelse ($transaksiTerbaru as $trx)
+<section class="content">
+	<div class="container-fluid">
+		<div class="data-table-card">
+			<div class="card-header">
+				<h3 class="card-title">Transaksi Terbaru</h3>
+				<button class="action-btn">Lihat Semua</button>
+			</div>
+			
+			<table class="data-table">
+				<thead>
 					<tr>
-						<td>#{{ $trx->notransaksi }}</td>
-						<td>{{ $trx->pelanggan->nama ?? 'Tidak Diketahui' }}</td>
-						<td>{{ $trx->detail->first()->obat->nama ?? '-' }}</td>
-						<td>Rp {{ number_format($trx->total_pembayaran, 0, ',', '.') }}</td>
-						<td>
-							@if($trx->status == 'selesai')
-								<span class="badge badge-success">Selesai</span>
-							@elseif($trx->status == 'proses')
-								<span class="badge badge-warning">Proses</span>
-							@else
-								<span class="badge badge-secondary">{{ ucfirst($trx->status) }}</span>
-							@endif
-						</td>
+						<th>ID Order</th>
+						<th>Customer</th>
+						<th>Produk</th>
+						<th>Total</th>
+						<th>Status</th>
 					</tr>
-				@empty
-					<tr>
-						<td colspan="5" class="text-center text-muted">Belum ada transaksi</td>
-					</tr>
-				@endforelse
-			</tbody>
-        </table>
-    </div>
-    
-    <div class="quick-actions">
-        <div class="card-header">
-            <h3 class="card-title">Quick Actions</h3>
-        </div>
-        
-        <div class="quick-action-item">
-            <div class="quick-action-icon">
-                <i class="fas fa-plus"></i>
-            </div>
-            <div>
-                <strong>Tambah Produk Baru</strong>
-                <p style="font-size: 12px; color: #aaa; margin-top: 4px;">Daftarkan produk baru</p>
-            </div>
-        </div>
-        
-        <div class="quick-action-item">
-            <div class="quick-action-icon">
-                <i class="fas fa-clipboard-list"></i>
-            </div>
-            <div>
-                <strong>Cek Pending Order</strong>
-                <p style="font-size: 12px; color: #aaa; margin-top: 4px;">8 order menunggu</p>
-            </div>
-        </div>
-        
-        <div class="quick-action-item">
-            <div class="quick-action-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-            <div>
-                <strong>Laporan Penjualan</strong>
-                <p style="font-size: 12px; color: #aaa; margin-top: 4px;">Lihat performa bulan ini</p>
-            </div>
-        </div>
-        
-        <div class="quick-action-item">
-            <div class="quick-action-icon">
-                <i class="fas fa-warehouse"></i>
-            </div>
-            <div>
-                <strong>Kelola Stok</strong>
-                <p style="font-size: 12px; color: #aaa; margin-top: 4px;">Update inventori</p>
-            </div>
-        </div>
-    </div>
-</div>
+				</thead>
+				<tbody>
+					@forelse ($transaksiTerbaru as $trx)
+						<tr>
+							<td>#{{ $trx->notransaksi }}</td>
+							<td>{{ $trx->pelanggan->name }}</td>
+							<td>{{ $trx->detail->first()->obat->nama ?? '-' }}</td>
+							<td>Rp {{ number_format($trx->total_pembayaran, 0, ',', '.') }}</td>
+							<td>
+								@if($trx->status == 'selesai')
+									<span class="badge badge-success">Selesai</span>
+								@elseif($trx->status == 'proses')
+									<span class="badge badge-warning">Proses</span>
+								@else
+									<span class="badge badge-secondary">{{ ucfirst($trx->status) }}</span>
+								@endif
+							</td>
+						</tr>
+					@empty
+						<tr>
+							<td colspan="5" class="text-center text-muted">Belum ada transaksi</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
 @endsection

@@ -31,7 +31,7 @@ class SupplierController extends Controller
 		$totalProduk = Obat::where('id_supplier', $supplier->id_supplier)->count();
 
 		$transaksiAktif = DetailTransaksi::whereHas('obat', function($q) use ($supplier) {
-				$q->where('id_supplier', $supplier->id);
+				$q->where('id_supplier', $supplier->id_supplier);
 			})
 			->whereHas('transaksi', function($q) {
 				$q->whereIn('status', ['proses', 'selesai']);
@@ -39,20 +39,20 @@ class SupplierController extends Controller
 			->count();
 
 		$pendingOrder = DetailTransaksi::whereHas('obat', function($q) use ($supplier) {
-				$q->where('id_supplier', $supplier->id);
+				$q->where('id_supplier', $supplier->id_supplier);
 			})
 			->whereHas('transaksi', function($q) {
 				$q->where('status', 'pending');
 			})
 			->count();
 
-		$stokMenipis = Obat::where('id_supplier', $supplier->id)
+		$stokMenipis = Obat::where('id_supplier', $supplier->id_supplier)
 			->where('stok', '<', 10)
 			->count();
 
 		$transaksiTerbaru = Transaksi::with(['detail.obat', 'pelanggan'])
 			->whereHas('detail.obat', function($q) use ($supplier) {
-				$q->where('id_supplier', $supplier->id);
+				$q->where('id_supplier', $supplier->id_supplier);
 			})
 			->latest()
 			->take(5)
@@ -70,8 +70,38 @@ class SupplierController extends Controller
 			'transaksiTerbaru'
 		));
 	}
+	
+	public function supplier_produk()
+	{
+		$menu = 'Supplier';
+		$subMenu = 'Produk Saya';
 
+		$supplier = Supplier::where('id_user', Auth::id())->first();
 
+		// Ambil hanya obat milik supplier login
+		$obats = Obat::where('id_supplier', $supplier->id_supplier)->latest()->get();
+
+		return view('supplier.obat.index', compact('menu', 'subMenu', 'obats'));
+	}
+	
+	public function supplier_transaksi()
+	{
+		$menu = 'Supplier';
+		$subMenu = 'Transaksi';
+
+		$supplier = Supplier::where('id_user', Auth::id())->first();
+
+		// Ambil transaksi yang melibatkan obat dari supplier ini
+		$transaksis = Transaksi::with(['pelanggan', 'detail.obat'])
+			->whereHas('detail.obat', function ($query) use ($supplier) {
+				$query->where('id_supplier', $supplier->id_supplier);
+			})
+			->latest()
+			->get();
+
+		return view('supplier.transaksi.index', compact('menu', 'subMenu', 'transaksis'));
+	}
+	
     public function create()
     {
 		$menu = 'Supplier';

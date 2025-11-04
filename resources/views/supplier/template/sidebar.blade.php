@@ -150,7 +150,7 @@
         <div class="menu-item">
             <a href="{{ route('supplier.produk') }}" class="menu-link {{ request()->routeIs('supplier.produk*') ? 'active' : '' }}">
                 <i class="fas fa-box menu-icon"></i>
-                <span>Data Produk</span>
+                <span>Obat</span>
             </a>
         </div>
         

@@ -10,7 +10,6 @@ class Obat extends Model
     use HasFactory;
     protected $table = 'obats';
     
-    // TAMBAHKAN 'harga' di fillable
     protected $fillable = ['nama', 'deskripsi', 'expired', 'harga_beli', 'harga_jual', 'stok', 'id_supplier'];
 
     public function supplier()

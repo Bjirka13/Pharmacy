@@ -6,21 +6,6 @@ Aplikasi sistem manajemen apotek berbasis web berbasis **Laravel**, dengan role 
 
 ---
 
-## 🚀 Fitur Utama
-
-### 👨‍💼 Admin
-- Login ke dashboard admin.
-- CRUD data obat
-- CRUD data supplier
-- Mengelola akun pelanggan dan supplier
-- Mengelola detail pengguna (alamat, telepon, dsb).[![Logo Laravel](https://download.logo.wine/logo/Laravel/Laravel-Logo.wine.png)](https://laravel.com/)
-
-# Apotek Management System
-
-Aplikasi sistem manajemen apotek berbasis web berbasis **Laravel**, dengan role **Admin**, **Supplier**, dan **Customer**. Sistem mencakup pengelolaan obat, transaksi penjualan, pemasok, hingga dashboard terpisah untuk setiap role.
-
----
-
 ## Fitur Utama
 
 ### Admin
@@ -118,7 +103,7 @@ http://localhost:8000
 
 ---
 
-## 🔐 Membuat Akun Manual (Tanpa Seeder)
+## Membuat Akun Manual (Tanpa Seeder)
 
 Project ini **tidak menyediakan akun default** untuk Admin, Supplier, atau Customer.  
 Anda dapat membuat akun sendiri menggunakan **PHP Tinker**.
@@ -164,7 +149,7 @@ Tabel inti sistem:
 
 
 ```
-![ERD](public/images/erd.png)
+public/images/erd.png
 ```
 
 ---
@@ -176,20 +161,16 @@ Kemudian tampilkan seperti berikut:
 
 ```
 1. Register Page
-![Register](public/images/register.png)
+public/images/register.png
 
 2. Login Page
-![Login](public/images/login.png)
+public/images/login.png
 
 3. Admin Dashboard
-![Dashboard Admin](public/images/dashboard-admin.png)
+public/images/dashboard-admin.png
 
 4. Supplier Dashboard
-![Dashboard Supplier](public/images/dashboard-supplier.png)
+public/images/dashboard-supplier.png
 
 5. Customer Dashboard
-![Dashboard Customer](public/images/dashboard-customer.png)
-
-
-
-
+public/images/dashboard-customer.png

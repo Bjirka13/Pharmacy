@@ -149,7 +149,7 @@ Tabel inti sistem:
 
 
 
-(public/images/erd.png)
+![ERD](public/images/erd.png)
 
 ---
 
@@ -160,16 +160,16 @@ Kemudian tampilkan seperti berikut:
 
 
 1. Register Page
-(public/images/Register.jpg)
+![Register](public/images/Register.jpg)
 
 2. Login Page
-(public/images/Login.jpg)
+![Login](public/images/Login.jpg)
 
 3. Admin Dashboard
-(public/images/Admin Dashboard.jpg)
+![Dashboard Admin](public/images/DashboardAdmin.jpg)
 
 4. Supplier Dashboard
-(public/images/Supplier Dashboard.jpg)
+![Dashboard Supplier](public/images/DashboardSupplier.jpg)
 
 5. Customer Dashboard
-(public/images/Pelanggan Dashboard.jpg)
+![Dashboard Customer](public/images/DashboardCustomer.jpg)

@@ -148,9 +148,8 @@ Tabel inti sistem:
 - **detail_transaksis**
 
 
-```
-public/images/erd.png
-```
+
+(public/images/erd.png)
 
 ---
 
@@ -159,18 +158,18 @@ public/images/erd.png
 
 Kemudian tampilkan seperti berikut:
 
-```
+
 1. Register Page
-public/images/register.png
+(public/images/Register.jpg)
 
 2. Login Page
-public/images/login.png
+(public/images/Login.jpg)
 
 3. Admin Dashboard
-public/images/dashboard-admin.png
+(public/images/Admin Dashboard.jpg)
 
 4. Supplier Dashboard
-public/images/dashboard-supplier.png
+(public/images/Supplier Dashboard.jpg)
 
 5. Customer Dashboard
-public/images/dashboard-customer.png
+(public/images/Pelanggan Dashboard.jpg)

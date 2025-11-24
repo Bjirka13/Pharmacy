@@ -147,8 +147,7 @@ Tabel inti sistem:
 - **transaksis**
 - **detail_transaksis**
 
-
-
+ERD
 ![ERD](public/images/erd.png)
 
 ---
@@ -166,10 +165,10 @@ Kemudian tampilkan seperti berikut:
 ![Login](public/images/Login.jpg)
 
 3. Admin Dashboard
-![Dashboard Admin](public/images/DashboardAdmin.jpg)
+![Dashboard Admin](public/images/AdminDashboard.jpg)
 
 4. Supplier Dashboard
-![Dashboard Supplier](public/images/DashboardSupplier.jpg)
+![Dashboard Supplier](public/images/SupplierDashboard.jpg)
 
 5. Customer Dashboard
-![Dashboard Customer](public/images/DashboardCustomer.jpg)
+![Dashboard Customer](public/images/PelangganDashboard.jpg)
